@@ -1,98 +1,57 @@
+console.log("🟢 product-admin JS 실행됨");
 document.addEventListener("DOMContentLoaded", function () {
 
-    // products 불러오기 (localStorage)
-    const products = JSON.parse(localStorage.getItem("products")) || [];
     const form = document.getElementById("product-form");
     const productList = document.getElementById("product-list");
 
-    // 제품 목록 렌더링
+    const API_URL = "https://script.google.com/macros/s/AKfycbwbK4-VXVQ9Q8arK1PcCZVBbUqN7kXQxmY42VreIZTv1pDYx86cWLt358n8X3Z4cHA/exec";
+
     function renderProducts() {
-        productList.innerHTML = "";
-        products.forEach((product, index) => {
-            const div = document.createElement("div");
-            div.className = "production-product-item";
-            div.innerHTML = `
-                <strong>${product.name}</strong><br>
-                ${product.description}<br>
-                원가: ${product.originalPrice.toLocaleString()}원<br>
-                판매가: ${product.salePrice.toLocaleString()}원<br>
-                <img src="${product.image}" alt="${product.name}" style="width:150px;height:150px;object-fit:cover;"><br>
-                <button onclick="deleteProduct(${index})">삭제</button>
-                <hr>
-            `;
-            productList.appendChild(div);
-        });
+        productList.innerHTML = "<p>👉 상품은 Google Sheets에서 관리됩니다</p>";
     }
 
-    // 제품 삭제
-    window.deleteProduct = function(index) {
-        if (!confirm("정말 삭제하시겠습니까?")) return;
-        products.splice(index, 1);
-        localStorage.setItem("products", JSON.stringify(products));
-        renderProducts();
+    window.deleteProduct = function () {
+        alert("삭제 기능은 Google Sheets 연동 후 가능합니다");
     }
 
-    // 제품 추가
+    // 🚀 등록
     form.addEventListener("submit", function (e) {
         e.preventDefault();
 
-        const fileInput = document.getElementById("product-image");
-        const file = fileInput.files[0];
+        console.log("🟡 submit 실행됨");
 
-        if (!file) {
-            alert("이미지를 선택해주세요.");
-            return;
-        }
+        const newProduct = {
+            name: document.getElementById("product-name").value.trim(),
+            description: document.getElementById("product-desc").value.trim(),
+            originalPrice: Number(document.getElementById("product-original").value),
+            salePrice: Number(document.getElementById("product-sale").value),
 
-        const reader = new FileReader();
-        reader.onload = function (event) {
-            // 이미지 로딩 후 canvas로 리사이즈
-            const img = new Image();
-            img.src = event.target.result;
-
-            img.onload = function() {
-                const canvas = document.createElement("canvas");
-                const maxWidth = 500;   // 최대 너비
-                const maxHeight = 500;  // 최대 높이
-                let width = img.width;
-                let height = img.height;
-
-                // 비율 유지하며 크기 조정
-                if(width > height) {
-                    if(width > maxWidth){
-                        height *= maxWidth / width;
-                        width = maxWidth;
-                    }
-                } else {
-                    if(height > maxHeight){
-                        width *= maxHeight / height;
-                        height = maxHeight;
-                    }
-                }
-
-                canvas.width = width;
-                canvas.height = height;
-                const ctx = canvas.getContext("2d");
-                ctx.drawImage(img, 0, 0, width, height);
-
-                const resizedDataUrl = canvas.toDataURL("image/jpeg", 0.8); // 품질 80%
-
-                const newProduct = {
-                    name: document.getElementById("product-name").value,
-                    description: document.getElementById("product-desc").value,
-                    originalPrice: Number(document.getElementById("product-original").value),
-                    salePrice: Number(document.getElementById("product-sale").value),
-                    image: resizedDataUrl // 리사이즈된 이미지 사용
-                };
-
-                products.push(newProduct);
-                localStorage.setItem("products", JSON.stringify(products));
-                renderProducts();
-                form.reset();
-            };
+            // ⚠️ 이미지: file input → 일단 URL 방식으로 통일
+            image: "https://picsum.photos/300/300"
         };
 
-        reader.readAsDataURL(file);
+        console.log("🔵 전송 데이터:", newProduct);
+
+        fetch(API_URL, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(newProduct)
+        })
+        .then(async (res) => {
+            const text = await res.text();
+            console.log("🟢 Apps Script 응답:", text);
+            return text;
+        })
+        .then(result => {
+            alert("상품 등록 완료!");
+            form.reset();
+        })
+        .catch(err => {
+            console.error("🔴 등록 실패:", err);
+            alert("등록 실패 (Apps Script 확인 필요)");
+        });
     });
 
     renderProducts();
