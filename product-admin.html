@@ -10,28 +10,35 @@
 
 <h1>제품 등록</h1>
 
+<!-- =========================
+     상품 등록 폼
+========================= -->
 <form id="product-form">
-    <label for="product-name">상품명</label>
-    <input type="text" id="product-name" placeholder="상품명을 입력하세요" required>
 
-    <label for="product-desc">상품 설명</label>
-    <input type="text" id="product-desc" placeholder="상품 설명을 입력하세요" required>
+    <input type="text" id="product-name" placeholder="상품명" required><br><br>
 
-    <label for="product-original">원가</label>
-    <input type="number" id="product-original" placeholder="원가를 입력하세요" required>
+    <input type="text" id="product-desc" placeholder="상품 설명" required><br><br>
 
-    <label for="product-sale">판매가</label>
-    <input type="number" id="product-sale" placeholder="판매가를 입력하세요" required>
+    <input type="number" id="product-original" placeholder="원가" required><br><br>
+
+    <input type="number" id="product-sale" placeholder="판매가" required><br><br>
 
     <label for="product-image">상품 이미지</label>
-    <input type="file" id="product-image" accept="image/*" required>
+    <input type="file" id="product-image" accept="image/*" required><br><br>
 
-    <button type="submit">제품 등록</button>
+    <button type="submit">상품 등록</button>
+
 </form>
 
-<h2>등록된 제품</h2>
-<div id="product-list" class="production-product-list"></div>
+<hr>
 
+<h2>등록된 상품</h2>
+<div id="product-list"></div>
+
+<!-- =========================
+     JS 연결 (중요)
+========================= -->
 <script src="product-admin.js"></script>
+
 </body>
 </html>
