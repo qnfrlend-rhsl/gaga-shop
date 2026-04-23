@@ -1,95 +1,154 @@
-const adminOrders = document.getElementById("admin-orders");
+document.addEventListener("DOMContentLoaded", () => {
 
-let orders = []; // ✅ localStorage 제거 → 서버 데이터로 변경
+    const adminOrders = document.getElementById("admin-orders");
+    if (!adminOrders) {
+        console.error("admin-orders div 없음");
+        return;
+    }
 
-/* =========================
-   주문 불러오기 (Google Sheets)
-========================= */
-function loadOrders() {
+    const API_URL = "https://script.google.com/macros/s/AKfycbz-cJ_UjGe5r-W6veov8u5LpiwnQfVb8Vrvnscy6MAnu_zplMHj1Z_d34XgyDKlI5Kw1A/exec";
 
-    fetch("https://opensheet.elk.sh/YOUR_SHEET_ID/orders")
-        .then(res => res.json())
-        .then(data => {
+    let orders = [];
 
-            console.log("주문 데이터:", data);
+    /* =========================
+       주문 불러오기
+    ========================= */
+    function loadOrders() {
+        fetch(API_URL + "?action=getOrders")
+            .then(res => res.json())
+            .then(data => {
 
-            orders = data || [];
+                console.log("주문 데이터:", data);
 
-            renderAdminOrders();
-        })
-        .catch(err => {
-            console.log("주문 불러오기 실패:", err);
+                if (Array.isArray(data)) {
+                    orders = data;
+                } else if (Array.isArray(data?.data)) {
+                    orders = data.data;
+                } else if (Array.isArray(data?.result)) {
+                    orders = data.result;
+                } else {
+                    console.error("알 수 없는 데이터 구조:", data);
+                    orders = [];
+                }
+
+                renderAdminOrders();
+            })
+            .catch(err => console.log("주문 불러오기 실패:", err));
+    }
+
+    /* =========================
+       상태 색상
+    ========================= */
+    function getStatusClass(status) {
+        switch (status) {
+            case "결제대기": return "status-pending";
+            case "결제완료": return "status-paid";
+            case "배송준비중": return "status-ready";
+            case "배송중": return "status-shipping";
+            case "배송완료": return "status-done";
+            default: return "";
+        }
+    }
+
+    /* =========================
+       렌더링
+    ========================= */
+    function renderAdminOrders() {
+        adminOrders.innerHTML = "";
+
+        orders.forEach(order => {
+
+            let items = [];
+
+            try {
+                items = Array.isArray(order.items)
+                    ? order.items
+                    : JSON.parse(order.items || "[]");
+            } catch {
+                items = [];
+            }
+
+            // 🔥 핵심 수정: id 안전 처리
+            const safeId = order.id || order.date;
+
+            const div = document.createElement("div");
+            div.classList.add("order-item");
+
+            div.innerHTML = `
+                <h3>${order.name || "이름 없음"}</h3>
+                📅 ${order.date || "-"}<br>
+
+                <ul>
+                    ${items.map(item =>
+                        `<li>${item.name} x ${item.qty}</li>`
+                    ).join("")}
+                </ul>
+
+                📞 ${order.phone || "-"}<br>
+                📍 ${order.address || "-"}<br>
+                💰 ${(Number(order.total) || 0).toLocaleString()}원<br>
+
+                📦 <span class="status-badge ${getStatusClass(order.status)}">
+                    ${order.status || "결제대기"}
+                </span>
+                <br><br>
+            `;
+
+            /* =========================
+               상태 버튼
+            ========================= */
+            ["결제대기", "결제완료", "배송준비중", "배송중", "배송완료"].forEach(status => {
+                const btn = document.createElement("button");
+                btn.textContent = status;
+                btn.addEventListener("click", () => updateStatus(safeId, status));
+                div.appendChild(btn);
+            });
+
+            /* =========================
+               삭제 버튼
+            ========================= */
+            const deleteBtn = document.createElement("button");
+            deleteBtn.textContent = "삭제";
+            deleteBtn.addEventListener("click", () => deleteOrder(safeId));
+            div.appendChild(deleteBtn);
+
+            div.appendChild(document.createElement("hr"));
+
+            adminOrders.appendChild(div);
         });
-}
+    }
 
-/* =========================
-   주문 렌더링 (기존 그대로 유지 + 안정성만 추가)
-========================= */
-function renderAdminOrders() {
+    /* =========================
+       상태 변경
+    ========================= */
+    function updateStatus(id, status) {
 
-    adminOrders.innerHTML = "";
+        fetch(`${API_URL}?action=updateStatus&id=${encodeURIComponent(id)}&status=${encodeURIComponent(status)}`)
+            .then(res => res.text())
+            .then(res => {
+                console.log("상태 변경:", res);
+                loadOrders();
+            })
+            .catch(err => console.log("status error:", err));
+    }
 
-    orders.forEach((order, index) => {
+    /* =========================
+       삭제
+    ========================= */
+    function deleteOrder(id) {
 
-        const div = document.createElement("div");
-        div.classList.add("order-item");
+        fetch(API_URL + "?action=deleteOrder&id=" + encodeURIComponent(id))
+            .then(res => res.text())
+            .then(res => {
+                console.log("삭제 응답:", res);
+                loadOrders();
+            })
+            .catch(err => console.log("delete error:", err));
+    }
 
-        div.innerHTML = `
-            <h3>${order.name || "이름 없음"}</h3>
-            📅 주문일: ${order.date || "날짜 정보 없음"}<br>
-
-            <ul>
-                ${(order.items || []).map(item => `
-                    <li>${item.name} x ${item.qty}</li>
-                `).join("")}
-            </ul>
-
-            📞 ${order.phone || ""}<br>
-            📍 ${order.address || ""}<br>
-            💰 ${(Number(order.total) || 0).toLocaleString()}원<br>
-            📦 상태: <strong>${order.status || "결제대기"}</strong>
-
-            <div>
-                <button onclick="updateStatus(${index}, '결제대기')">결제대기</button>
-                <button onclick="updateStatus(${index}, '결제완료')">결제완료</button>
-                <button onclick="updateStatus(${index}, '배송준비중')">배송준비중</button>
-                <button onclick="updateStatus(${index}, '배송중')">배송중</button>
-                <button onclick="updateStatus(${index}, '배송완료')">배송완료</button>
-                <button onclick="deleteOrder(${index})">삭제</button>
-            </div>
-
-            <hr>
-        `;
-
-        adminOrders.appendChild(div);
-    });
-}
-
-/* =========================
-   상태 변경 (임시 - localStorage 제거됨)
-========================= */
-function updateStatus(index, status) {
-
-    orders[index].status = status;
-
-    alert("⚠️ 현재는 화면용 변경입니다 (Google Sheets 반영은 다음 단계)");
-
-    renderAdminOrders();
-}
-
-/* =========================
-   삭제 (임시 - localStorage 제거됨)
-========================= */
-function deleteOrder(index) {
-
-    orders.splice(index, 1);
-
-    alert("⚠️ 현재는 화면용 삭제입니다 (Google Sheets 반영은 다음 단계)");
-
-    renderAdminOrders();
-}
-
-/* =========================
-   실행
-========================= */
-loadOrders();
+    /* =========================
+       초기 실행 + 자동갱신
+    ========================= */
+    loadOrders();
+    setInterval(loadOrders, 5000);
+});
