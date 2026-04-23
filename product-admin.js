@@ -1,58 +1,126 @@
-console.log("🟢 product-admin JS 실행됨");
-document.addEventListener("DOMContentLoaded", function () {
+const API_URL = "https://script.google.com/macros/s/AKfycbz-cJ_UjGe5r-W6veov8u5LpiwnQfVb8Vrvnscy6MAnu_zplMHj1Z_d34XgyDKlI5Kw1A/exec"; // 👈 여기에 본인 URL
 
-    const form = document.getElementById("product-form");
-    const productList = document.getElementById("product-list");
+const form = document.getElementById("product-form");
+const productList = document.getElementById("product-list");
 
-    const API_URL = "https://script.google.com/macros/s/AKfycbwbK4-VXVQ9Q8arK1PcCZVBbUqN7kXQxmY42VreIZTv1pDYx86cWLt358n8X3Z4cHA/exec";
+/* =========================
+   안전 유틸
+========================= */
+function toNumber(value) {
+    return Number(value) || 0;
+}
 
-    function renderProducts() {
-        productList.innerHTML = "<p>👉 상품은 Google Sheets에서 관리됩니다</p>";
-    }
+/* =========================
+   상품 등록
+========================= */
+form.addEventListener("submit", async function (e) {
+    e.preventDefault();
 
-    window.deleteProduct = function () {
-        alert("삭제 기능은 Google Sheets 연동 후 가능합니다");
-    }
+    try {
+        const name = document.getElementById("product-name").value.trim();
+        const desc = document.getElementById("product-desc").value.trim();
+        const original = document.getElementById("product-original").value;
+        const sale = document.getElementById("product-sale").value;
+        const imageFile = document.getElementById("product-image").files[0];
 
-    // 🚀 등록
-    form.addEventListener("submit", function (e) {
-        e.preventDefault();
+        if (!name || !desc || !imageFile) {
+            alert("필수값을 입력하세요");
+            return;
+        }
 
-        console.log("🟡 submit 실행됨");
+        const imageBase64 = await readFileAsDataURL(imageFile);
 
-        const newProduct = {
-            name: document.getElementById("product-name").value.trim(),
-            description: document.getElementById("product-desc").value.trim(),
-            originalPrice: Number(document.getElementById("product-original").value),
-            salePrice: Number(document.getElementById("product-sale").value),
-
-            // ⚠️ 이미지: file input → 일단 URL 방식으로 통일
-            image: "https://picsum.photos/300/300"
+        const product = {
+            name,
+            description: desc,
+            originalPrice: toNumber(original),
+            salePrice: toNumber(sale),
+            image: imageBase64
         };
 
-        console.log("🔵 전송 데이터:", newProduct);
-
-        fetch(API_URL, {
+        const res = await fetch(API_URL + "?action=addProduct", {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(newProduct)
-        })
-        .then(async (res) => {
-            const text = await res.text();
-            console.log("🟢 Apps Script 응답:", text);
-            return text;
-        })
-        .then(result => {
-            alert("상품 등록 완료!");
-            form.reset();
-        })
-        .catch(err => {
-            console.error("🔴 등록 실패:", err);
-            alert("등록 실패 (Apps Script 확인 필요)");
+            body: JSON.stringify(product)
         });
-    });
 
-    renderProducts();
+        const result = await res.text();
+
+        console.log("등록 결과:", result);
+        alert("상품 등록 완료!");
+
+        form.reset();
+        loadProducts();
+
+    } catch (err) {
+        console.error("상품 등록 오류:", err);
+        alert("등록 실패");
+    }
 });
+
+
+/* =========================
+   파일 읽기 Promise화
+========================= */
+function readFileAsDataURL(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = reject;
+
+        reader.readAsDataURL(file);
+    });
+}
+
+
+/* =========================
+   상품 불러오기
+========================= */
+async function loadProducts() {
+    try {
+        const res = await fetch(API_URL + "?action=getProducts");
+        const data = await res.json();
+
+        renderProducts(data);
+
+    } catch (err) {
+        console.error("상품 불러오기 실패:", err);
+        productList.innerHTML = "<p>데이터 로딩 실패</p>";
+    }
+}
+
+
+/* =========================
+   상품 렌더링
+========================= */
+function renderProducts(products = []) {
+
+    productList.innerHTML = "";
+
+    if (products.length === 0) {
+        productList.innerHTML = "<p>등록된 상품이 없습니다</p>";
+        return;
+    }
+
+    products.forEach(p => {
+
+        const div = document.createElement("div");
+        div.classList.add("product-item");
+
+        div.innerHTML = `
+            <img src="${p.image}" alt="${p.name} 상품 이미지">
+            <h3>${p.name}</h3>
+            <p>${p.description}</p>
+            <p>원가: ${toNumber(p.originalPrice).toLocaleString()}</p>
+            <p>판매가: ${toNumber(p.salePrice).toLocaleString()}</p>
+        `;
+
+        productList.appendChild(div);
+    });
+}
+
+
+/* =========================
+   초기 실행
+========================= */
+loadProducts();
