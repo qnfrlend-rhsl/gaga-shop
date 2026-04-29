@@ -46,7 +46,8 @@ body {
    상품 영역
 ========================= */
 .product {
-    padding: 40px;
+    padding: 5px;
+   margin: 0;
 }
 
 .product-list {
