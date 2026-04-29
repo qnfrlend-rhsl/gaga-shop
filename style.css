@@ -298,7 +298,8 @@ body {
         position: static;
         width: 90%;
         margin: 20px auto;
-        max-height: none;
+        max-height: 60vh;
+        overflow-y: auto;
     }
 }
 
@@ -319,6 +320,10 @@ body {
     border: none;
 
     z-index: 2000;
+}
+#order-history {
+    max-height: 400px;
+    overflow-y: auto;
 }
 
 /* =========================
