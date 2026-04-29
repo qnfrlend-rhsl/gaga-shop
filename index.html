@@ -54,46 +54,45 @@
     <h3>🧾 주문 내역</h3>
     <div id="order-history"></div>
 
-</div> <!-- 🔥 cart-box 끝 (여기가 핵심!) -->
+    <!-- 💳 결제 패널 -->
+    <div id="pay-panel" class="pay-panel">
+        <div class="pay-content">
+
+            <!-- 🏦 판매자 정보 (🔥 추가) -->
+            <div class="seller-info">
+                <h3>🏦 판매자 계좌 정보</h3>
+                <p>국민은행 123-456-7890</p>
+                <p>예금주: 가가춘천농축임수센터</p>
+            </div>
+
+            <!-- 구매자 정보 -->
+            <h3>결제 정보</h3>
+
+            <input type="text" id="buyer-name" placeholder="이름">
+            <input type="text" id="buyer-address" placeholder="주소">
+            <input type="text" id="buyer-phone" placeholder="전화번호">
+
+            <h4 id="pay-total"></h4>
+
+            <p id="pay-message"></p>
+
+            <p id="order-status" class="order-status"></p>
+
+            <button id="pay-confirm">주문 대기</button>
+            <button id="pay-close">닫기</button>
 
 
-<!-- 💳 결제 패널 (🔥 반드시 밖으로 이동) -->
-<div id="pay-panel" class="pay-panel">
-    <div class="pay-content">
-
-        <!-- 🏦 판매자 정보 -->
-        <div class="seller-info">
-            <h3>🏦 판매자 계좌 정보</h3>
-            <p>국민은행 123-456-7890</p>
-            <p>예금주: 가가춘천농축임수센터</p>
         </div>
-
-        <!-- 구매자 정보 -->
-        <h3>결제 정보</h3>
-
-        <input type="text" id="buyer-name" placeholder="이름">
-        <input type="text" id="buyer-address" placeholder="주소">
-        <input type="text" id="buyer-phone" placeholder="전화번호">
-
-        <h4 id="pay-total"></h4>
-
-        <p id="pay-message"></p>
-
-        <p id="order-status" class="order-status"></p>
-
-        <button id="pay-confirm">주문 대기</button>
-        <button id="pay-close">닫기</button>
-
     </div>
-</div>
 
+</div>
 
 <!-- 🪟 상품 모달 -->
 <div id="modal" class="modal">
     <div class="modal-content">
 
         <span id="modal-close" class="close">&times;</span>
-
+        
         <img id="modal-img" alt="상품 이미지">
         <h2 id="modal-title"></h2>
         <p id="modal-desc"></p>
