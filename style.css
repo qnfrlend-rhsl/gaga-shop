@@ -295,9 +295,10 @@ body {
     }
 
     .cart-box {
-        position: static;
-        width: 90%;
-        margin: 20px auto;
+        position: fixed;
+        top: 80px;
+        left: 5%;
+        right: 5%;
         max-height: 60vh;
         overflow-y: auto;
     }
