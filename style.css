@@ -63,7 +63,7 @@ body {
 .product-item {
     background: white;
     border-radius: 12px;
-    padding: 15px;
+    padding: 8px;
     border: 1px solid #ddd;
 
     display: flex;
@@ -287,8 +287,9 @@ body {
     .product-list {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
-       gap: 10px;
+       gap: 5px;
        padding: 5px;
+       margin: 0;
     }
 
     .cart-box {
