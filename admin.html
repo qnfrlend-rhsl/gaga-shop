@@ -13,7 +13,33 @@
 
 <div id="admin-orders"></div>
 
+<hr>
+
+<h2>📦 상품 관리</h2>
+
+<form id="product-form">
+    <input type="text" id="product-name" placeholder="상품명" required><br><br>
+
+    <input type="text" id="product-desc" placeholder="상품 설명" required><br><br>
+
+    <input type="number" id="product-original" placeholder="원가" required><br><br>
+
+    <input type="number" id="product-sale" placeholder="판매가" required><br><br>
+
+    <label for="product-image">상품 이미지</label>
+    <input type="file" id="product-image" accept="image/*" required><br><br>
+
+    <button type="submit">상품 등록</button>
+</form>
+
+<hr>
+
+<h3>등록된 상품</h3>
+<div id="product-list"></div>
+
 <script src="admin.js"></script>
+
+
 
 </body>
 </html>
