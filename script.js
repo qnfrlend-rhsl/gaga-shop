@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", function () {
     /* =========================
        API URL
     ========================= */
-    const API_URL = "https://script.google.com/macros/s/AKfycbwcKwHPTWKTloJs9jlX4VFiFcxKWMwsCOZXqLzLXCG3gbJLz68FXxx0BAGnHkim8grBQA/exec";
+    const API_URL = "https://script.google.com/macros/s/AKfycbzTvtByQBLt4tx0NSKWlFC1PTpy9-j4JIiHqoKAYjblLXlz1S9xw9gsvra1DmcrUoBqYQ/exec";
 
     /* =========================
        DOM
@@ -36,7 +36,7 @@ document.addEventListener("DOMContentLoaded", function () {
     ========================= */
     let products = [];
 
-    fetch("https://opensheet.elk.sh/1XKQa35tuBMYaaucXvBf6YNw2F42EY584zSQFHYc8qfc/시트1")
+    fetch("https://opensheet.elk.sh/1XKQa35tuBMYaaucXvBf6YNw2F42EY584zSQFHYc8qfc/products")
         .then(res => res.json())
         .then(data => {
             products = data.map(p => ({
@@ -406,3 +406,4 @@ document.addEventListener("DOMContentLoaded", function () {
 }
     window.updateOrderStatus = updateOrderStatus;
 });
+
