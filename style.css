@@ -166,6 +166,7 @@ html, body {
 
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     z-index: 9999;
+
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.3s ease;
@@ -288,7 +289,7 @@ html, body {
    모바일
 ========================= */
 @media (max-width: 768px) {
-   body {
+    body {
         min-height: 100vh;
     }
     .top-header {
@@ -298,7 +299,7 @@ html, body {
     .logo {
         width: 110px;
         height: auto;
-       margin-right: -15px;
+        margin-right: -15px;
     }
 
     .site-name {
@@ -337,7 +338,29 @@ html, body {
     overflow-y: auto;
     touch-action: auto;
     z-index: 9999;
+    }
 }
+
+/* =========================
+   장바구니 버튼
+========================= */
+.cart-toggle {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+
+    background: #1abc9c;
+    color: white;
+    border: none;
+
+    font-size: 28px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+
+    z-index: 2000;
 }
 
 /* =========================
