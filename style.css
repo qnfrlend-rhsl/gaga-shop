@@ -166,7 +166,9 @@ html, body {
 
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     z-index: 9999;
-    display: none;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease;
 }
 
 .cart-box.open {
@@ -333,6 +335,7 @@ html, body {
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 
     overflow-y: auto;
+    touch-action: auto;
     z-index: 9999;
 }
 }
