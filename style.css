@@ -50,16 +50,19 @@ body {
    margin: 0;
 }
 
+/* =========================
+   상품 카드
+========================= */
 .product-list {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(180px, 250px));
-    justify-content: center;
-    gap: 20px;
-    padding: 20px;
+    grid-template-columns: repeat(auto-fill, 180px);
+    gap: 10px;
+    padding: 10px;
+    justify-content: start;
 }
 
 /* =========================
-   상품 카드
+   카드
 ========================= */
 .product-item {
     background: white;
@@ -67,23 +70,31 @@ body {
     padding: 8px;
     border: 1px solid #ddd;
 
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    width: 180px;
+    box-sizing: border-box;
 
-    transition: all 0.25s ease;
+    margin: 0;
     box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
 
+/* 이미지 */
 .product-item img {
     width: 100%;
-    height: 110px;
+    height: 100px;
     object-fit: cover;
     border-radius: 8px;
 }
 
+/* 텍스트 */
+.product-item h4,
+.product-item p {
+    margin: 2px 0;
+    font-size: 13px;
+}
+
+/* hover */
 .product-item:hover {
-    transform: translateY(-6px) scale(1.02);
+    transform: translateY(-6px);
     box-shadow: 0 6px 15px rgba(0,0,0,0.1);
 }
 
@@ -447,3 +458,4 @@ body {
 .status-ready { background: orange; }
 .status-shipping { background: purple; }
 .status-done { background: green; }
+
