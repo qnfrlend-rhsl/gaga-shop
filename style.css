@@ -171,8 +171,6 @@ html, body {
     visibility: hidden;
 
     transition: opacity 0.3s ease;
-
-    touch-action: none;
 }
 
 .cart-box.open {
