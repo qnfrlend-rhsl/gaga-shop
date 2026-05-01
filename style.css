@@ -9,6 +9,12 @@ body {
     background-color: #f9f9f9;
 }
 
+html, body {
+    width: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
 /* =========================
    헤더
 ========================= */
@@ -286,6 +292,9 @@ body {
    모바일
 ========================= */
 @media (max-width: 768px) {
+   body {
+        min-height: 100vh;
+    }
     .top-header {
         padding: 16px 10px;
     }
@@ -321,6 +330,7 @@ body {
         max-height: none;
         height: auto;
         overflow: visible;
+        overflow-y: visible;
     }
 }
 
