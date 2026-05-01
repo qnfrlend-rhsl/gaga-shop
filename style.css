@@ -287,27 +287,27 @@ body {
 ========================= */
 @media (max-width: 768px) {
     .top-header {
-        padding: 20px 10px;
+        padding: 16px 10px;
     }
 
     .logo {
-        width: 140px;
+        width: 110px;
         height: auto;
     }
 
     .site-name {
-        font-size: 42px;
-        line-height: 1.1;
+        font-size: 32px;
+        line-height: 1.2;
     }
 
     .logo-box {
-        gap: 14px;
+        gap: 10px;
     }
 
     .product-list {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
-        gap: 5px;
+        gap: 6px;
         width: 100%;
         padding: 0;
         margin: 0;
