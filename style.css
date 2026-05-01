@@ -319,6 +319,8 @@ body {
         width: 90%;
         margin: 20px auto;
         max-height: none;
+        height: auto;
+        overflow: visible;
     }
 }
 
