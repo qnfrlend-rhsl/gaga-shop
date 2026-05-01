@@ -289,6 +289,10 @@ html, body {
    모바일
 ========================= */
 @media (max-width: 768px) {
+    #admin-orders {
+        grid-template-columns: repeat(auto-fill, 140px);
+        gap: 6px;
+    }
     body {
         min-height: 100vh;
     }
@@ -361,11 +365,11 @@ html, body {
     right: 20px;
     bottom: 20px;
 
-    width: 20px;
-    height: 20px;
+    width: 50px;
+    height: 50px;
     border-radius: 50%;
 
-    background: #bb3562;
+    background: #1abc9c;
     color: white;
     border: none;
 
@@ -500,4 +504,89 @@ html, body {
 .status-ready { background: orange; }
 .status-shipping { background: purple; }
 .status-done { background: green; }
+
+
+#admin-orders {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 200px);
+    gap: 10px;
+    justify-content: start;
+}
+
+/* =========================
+   🧾 주문 카드 압축 (핵심 추가)
+========================= */
+.order-item {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+
+    padding: 6px 8px;   /* 핵심: 줄이기 */
+    margin-bottom: 6px;  /* 카드 간격 줄이기 */
+    flex-wrap: wrap;
+    flex-direction: column;
+
+    font-size: 13px;
+    line-height: 1.2;
+
+    display: flex;
+    flex-direction: column;
+    gap: 2px; /* 줄 간격 최소화 */
+}
+
+/* 제목 (이름) */
+.order-item h3 {
+    margin: 0;
+    font-size: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* 상태 뱃지 */
+.status-badge {
+    padding: 2px 6px;
+    font-size: 11px;
+    border-radius: 6px;
+}
+
+/* 상품 리스트 */
+.order-item ul {
+    margin: 4px 0;
+    padding-left: 14px;
+    font-size: 12px;
+}
+
+/* br 제거 효과 (이미 JS에서 br 많이 쓰고 있어서 압축) */
+.order-item br {
+    display: none;
+}
+
+/* 금액 강조 줄 */
+.order-item {
+    font-size: 13px;
+}
+
+/* =========================
+   버튼 영역 압축
+========================= */
+.order-item button {
+    padding: 2px 3px;
+    font-size: 12px;
+
+    margin: 2px 2px 0 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+
+    background: #f9f9f9;
+    display: inline-block;
+    align-items: center;
+    cursor: pointer;
+    line-height: 1.5;
+}
+
+/* 버튼 hover */
+.order-item button:hover {
+    background: #eee;
+}
 
