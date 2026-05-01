@@ -325,20 +325,32 @@ html, body {
     bottom: 80px;
     left: 5%;
     right: 5%;
-
     width: auto;
     max-height: 60vh;
-
     background: white;
     padding: 15px;
     border-radius: 12px;
     border: 1px solid #ddd;
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-
     overflow-y: auto;
     touch-action: auto;
     z-index: 9999;
     }
+
+    .pay-panel {
+        align-items: flex-start;
+        padding-top: 30px;
+    }
+    
+    .pay-content {
+    width: 90%;
+    max-height: 80vh;
+
+    padding: 20px;
+    overflow-y: auto;
+
+    box-sizing: border-box;
+  }
 }
 
 /* =========================
