@@ -296,12 +296,12 @@ body {
     }
 
     .site-name {
-        font-size: 28px;
+        font-size: 24px;
         line-height: 1.2;
     }
 
     .logo-box {
-        gap: 2px;
+        gap: 1px;
     }
 
     .product-list {
