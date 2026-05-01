@@ -285,25 +285,32 @@ body {
 /* =========================
    모바일
 ========================= */
-@media (max-width: 600px) {
-
-    .site-name {
-        font-size: 12px;
+@media (max-width: 768px) {
+    .top-header {
+        padding: 20px 10px;
     }
 
     .logo {
-        width: 40px;
-        height: 40px;
+        width: 140px;
+        height: auto;
+    }
+
+    .site-name {
+        font-size: 42px;
+        line-height: 1.1;
+    }
+
+    .logo-box {
+        gap: 14px;
     }
 
     .product-list {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
-       gap: 5px;
-       padding: 5px;
-       width: 100%;
-       padding: 0;
-       margin: 0;
+        gap: 5px;
+        width: 100%;
+        padding: 0;
+        margin: 0;
     }
 
     .cart-box {
@@ -312,25 +319,6 @@ body {
         margin: 20px auto;
         max-height: none;
     }
-}
-
-/* =========================
-   장바구니 버튼
-========================= */
-.cart-toggle {
-    position: fixed;
-    right: 20px;
-    bottom: 20px;
-
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-
-    background: #1abc9c;
-    color: white;
-    border: none;
-
-    z-index: 2000;
 }
 
 /* =========================
