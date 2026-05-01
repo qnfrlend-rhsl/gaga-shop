@@ -1,12 +1,16 @@
 document.addEventListener("DOMContentLoaded", () => {
 
     const adminOrders = document.getElementById("admin-orders");
+    const productForm = document.getElementById("product-form");
+    const productList = document.getElementById("product-list");
+
     if (!adminOrders) return;
 
-   const API_URL = "https://script.google.com/macros/s/AKfycbwcKwHPTWKTloJs9jlX4VFiFcxKWMwsCOZXqLzLXCG3gbJLz68FXxx0BAGnHkim8grBQA/exec";
-   
+    const API_URL = "https://script.google.com/macros/s/AKfycbzTvtByQBLt4tx0NSKWlFC1PTpy9-j4JIiHqoKAYjblLXlz1S9xw9gsvra1DmcrUoBqYQ/exec";
 
     let orders = [];
+    let editMode = false;
+    let editId = null;
 
     /* =========================
        주문 불러오기
@@ -18,30 +22,30 @@ document.addEventListener("DOMContentLoaded", () => {
                 orders = data || [];
                 renderAdminOrders();
             })
-            .catch(err => console.log("load error:", err));
+            .catch(console.log);
     }
 
     /* =========================
-       주문 상태 색상 변경
+       상태 색상
     ========================= */
     function getStatusClass(status) {
-    switch(status) {
-        case "결제대기": return "status-pending";
-        case "결제완료": return "status-paid";
-        case "배송준비중": return "status-ready";
-        case "배송중": return "status-shipping";
-        case "배송완료": return "status-done";
-        default: return "";
+        switch (status) {
+            case "결제대기": return "status-pending";
+            case "결제완료": return "status-paid";
+            case "배송준비중": return "status-ready";
+            case "배송중": return "status-shipping";
+            case "배송완료": return "status-done";
+            default: return "";
+        }
     }
-}
 
     /* =========================
-       렌더링
+       주문 렌더링
     ========================= */
     function renderAdminOrders() {
         adminOrders.innerHTML = "";
 
-        orders.forEach((order) => {
+        orders.forEach(order => {
 
             let items = [];
             try {
@@ -66,21 +70,19 @@ document.addEventListener("DOMContentLoaded", () => {
                 💰 ${(order.total ? Number(order.total) : 0).toLocaleString()}원<br>
                 📦 <span class="status-badge ${getStatusClass(order.status)}">
                     ${order.status || "결제대기"}
-                      </span><br><br>
+                </span><br><br>
             `;
 
-            /* 상태 버튼 */
-            ["결제대기","결제완료","배송준비중","배송중","배송완료"].forEach(status => {
+            ["결제대기", "결제완료", "배송준비중", "배송중", "배송완료"].forEach(status => {
                 const btn = document.createElement("button");
                 btn.textContent = status;
-                btn.addEventListener("click", () => updateStatus(order.id, status));
+                btn.onclick = () => updateStatus(order.id, status);
                 div.appendChild(btn);
             });
 
-            /* 삭제 버튼 */
             const deleteBtn = document.createElement("button");
             deleteBtn.textContent = "삭제";
-            deleteBtn.addEventListener("click", () => deleteOrder(order.id));
+            deleteBtn.onclick = () => deleteOrder(order.id);
             div.appendChild(deleteBtn);
 
             div.appendChild(document.createElement("hr"));
@@ -89,188 +91,193 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     /* =========================
-       주문 상태 변경
+       상태 변경
     ========================= */
     function updateStatus(id, status) {
         const cleanedId = String(id).replace(/\D/g, "");
 
-        fetch(`${API_URL}?action=updateStatus&id=${encodeURIComponent(cleanedId)}&status=${encodeURIComponent(status)}`)
-            .then(res => res.text())
+        fetch(`${API_URL}?action=updateStatus&id=${cleanedId}&status=${encodeURIComponent(status)}`)
             .then(() => loadOrders())
-            .catch(err => console.log("status error:", err));
+            .catch(console.log);
     }
 
     /* =========================
-       주문 삭제
+       삭제
     ========================= */
     function deleteOrder(id) {
         const cleanedId = String(id).replace(/\D/g, "");
 
-        fetch(API_URL + "?action=deleteOrder&id=" + encodeURIComponent(cleanedId))
-            .then(res => res.text())
+        fetch(API_URL + "?action=deleteOrder&id=" + cleanedId)
             .then(() => loadOrders())
-            .catch(err => console.log("delete error:", err));
+            .catch(console.log);
     }
 
     loadOrders();
-    setInterval(loadOrders, 3000);
+    setInterval(loadOrders, 20000);
 
     /* =========================
-       상품 DOM
+       CLOUDINARY 업로드
     ========================= */
-    const productForm = document.getElementById("product-form");
-    const productList = document.getElementById("product-list");
+    async function uploadImage(file) {
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("upload_preset", "product_upload");
+
+        const res = await fetch("https://api.cloudinary.com/v1_1/damvkvip3/image/upload", {
+            method: "POST",
+            body: formData
+        });
+
+        const data = await res.json();
+        return data.secure_url;
+    }
 
     /* =========================
-       이미지 압축
+       상품 등록 / 수정
     ========================= */
-    function compressImage(file) {
-        return new Promise((resolve, reject) => {
-            const reader = new FileReader();
+    productForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
 
-            reader.onload = function (event) {
-                const img = new Image();
+        try {
+            const name = document.getElementById("product-name").value.trim();
+            const desc = document.getElementById("product-desc").value.trim();
+            const original = document.getElementById("product-original").value;
+            const sale = document.getElementById("product-sale").value;
+            const imageFile = document.getElementById("product-image").files[0];
 
-                img.onload = function () {
-                    const canvas = document.createElement("canvas");
-                    const ctx = canvas.getContext("2d");
+            if (!name || !desc) {
+                alert("필수값 입력");
+                return;
+            }
 
-                    let width = img.width;
-                    let height = img.height;
+            let imageUrl = "";
 
-                    const maxSize = 800;
+            if (imageFile) {
+                imageUrl = await uploadImage(imageFile);
+            }
 
-                    if (width > height) {
-                        if (width > maxSize) {
-                            height *= maxSize / width;
-                            width = maxSize;
-                        }
-                    } else {
-                        if (height > maxSize) {
-                            width *= maxSize / height;
-                            height = maxSize;
-                        }
-                    }
+            // 수정 모드
+            if (editMode) {
+                const url =
+                    `${API_URL}?action=updateProduct` +
+                    `&id=${editId}` +
+                    `&name=${encodeURIComponent(name)}` +
+                    `&description=${encodeURIComponent(desc)}` +
+                    `&originalPrice=${encodeURIComponent(original)}` +
+                    `&salePrice=${encodeURIComponent(sale)}` +
+                    `&image=${encodeURIComponent(imageUrl)}`;
 
-                    canvas.width = width;
-                    canvas.height = height;
+                await fetch(url);
 
-                    ctx.drawImage(img, 0, 0, width, height);
+                editMode = false;
+                editId = null;
 
-                    const compressedBase64 = canvas.toDataURL("image/jpeg", 0.7);
-                    resolve(compressedBase64);
-                };
+                productForm.reset();
+                loadProducts();
+                return;
+            }
 
-                img.onerror = reject;
-                img.src = event.target.result;
-            };
+            // 등록
+            const url =
+                `${API_URL}?action=addProduct` +
+                `&name=${encodeURIComponent(name)}` +
+                `&description=${encodeURIComponent(desc)}` +
+                `&originalPrice=${encodeURIComponent(original)}` +
+                `&salePrice=${encodeURIComponent(sale)}` +
+                `&image=${encodeURIComponent(imageUrl)}`;
 
-            reader.onerror = reject;
-            reader.readAsDataURL(file);
+            await fetch(url);
+
+            alert("상품 등록 완료");
+
+            productForm.reset();
+            loadProducts();
+
+        } catch (err) {
+            console.log(err);
+            alert("등록 실패");
+        }
+    });
+
+    /* =========================
+       상품 수정 버튼
+    ========================= */
+    function editProduct(p) {
+        document.getElementById("product-name").value = p.name;
+        document.getElementById("product-desc").value = p.description;
+        document.getElementById("product-original").value = p.originalPrice;
+        document.getElementById("product-sale").value = p.salePrice;
+
+        editMode = true;
+        editId = p.id;
+    }
+
+    /* =========================
+       상품 삭제
+    ========================= */
+    function deleteProduct(id) {
+    fetch(API_URL + "?action=deleteProduct&id=" + encodeURIComponent(String(id)))
+        .then(res => res.text())
+        .then(res => {
+            console.log("삭제결과:", res);
+            loadProducts();
+        })
+        .catch(console.log);
+}
+
+    /* =========================
+       상품 불러오기
+    ========================= */
+    function loadProducts() {
+        fetch("https://opensheet.elk.sh/1XKQa35tuBMYaaucXvBf6YNw2F42EY584zSQFHYc8qfc/products")
+            .then(res => res.json())
+            .then(renderProducts)
+            .catch(console.log);
+    }
+
+    /* =========================
+       상품 렌더링 (버튼 위치 수정됨)
+    ========================= */
+    function renderProducts(products = []) {
+        productList.innerHTML = "";
+
+        products.forEach(p => {
+
+            const div = document.createElement("div");
+            div.classList.add("product-item");
+
+            const editBtn = document.createElement("button");
+            editBtn.textContent = "수정";
+            editBtn.onclick = () => editProduct(p);
+
+            const deleteBtn = document.createElement("button");
+            deleteBtn.textContent = "삭제";
+            const getId = (p) => p.id || p.ID || p.Id || Object.values(p)[0];
+            deleteBtn.onclick = () => deleteProduct(getId(p));
+
+            div.innerHTML = `
+                <img src="${p.image}" style="width:100px;height:100px;object-fit:cover;border-radius:8px;">
+                <h4>${p.name}</h4>
+                <p>${p.description || ""}</p>
+
+                <p style="text-decoration:line-through;color:gray;">
+                    ₩${Number(p.originalPrice || 0).toLocaleString()}
+                </p>
+
+                <p style="color:red;font-weight:bold;">
+                    ₩${Number(p.salePrice || 0).toLocaleString()}
+                </p>
+            `;
+
+            // 🔥 버튼은 밖에서 넣어서 문제 해결
+            div.appendChild(editBtn);
+            div.appendChild(deleteBtn);
+
+            div.appendChild(document.createElement("hr"));
+
+            productList.appendChild(div);
         });
     }
 
-    /* =========================
-   상품 등록
-========================= */
-productForm.addEventListener("submit", async function (e) {
-    e.preventDefault();
-
-    try {
-        const name = document.getElementById("product-name").value.trim();
-        const desc = document.getElementById("product-desc").value.trim();
-        const original = document.getElementById("product-original").value;
-        const sale = document.getElementById("product-sale").value;
-        const imageFile = document.getElementById("product-image").files[0];
-
-        if (!name || !desc || !imageFile) {
-            alert("필수값을 입력하세요");
-            return;
-        }
-
-        const imageBase64 = await compressImage(imageFile);
-
-        const product = {
-            name,
-            description: desc,
-            originalPrice: Number(original) || 0,
-            salePrice: Number(sale) || 0,
-            image: imageBase64
-        };
-
-        const url =
-            `${API_URL}?action=addProduct` +
-            `&name=${encodeURIComponent(name)}` +
-            `&description=${encodeURIComponent(desc)}` +
-            `&originalPrice=${encodeURIComponent(original)}` +
-            `&salePrice=${encodeURIComponent(sale)}` +
-            `&image=${encodeURIComponent(imageBase64)}`;
-
-        const res = await fetch(url);
-        const result = await res.text();
-
-        console.log("등록 결과:", result);
-
-        alert("상품 등록 완료!");
-
-        productForm.reset();
-        loadProducts();
-
-    } catch (err) {
-        console.error("상품 등록 오류:", err);
-        alert("등록 실패");
-    }
-});
-
-
-/* =========================
-   상품 불러오기
-========================= */
-function loadProducts() {
-    fetch("https://opensheet.elk.sh/1XKQa35tuBMYaaucXvBf6YNw2F42EY584zSQFHYc8qfc/시트1")
-        .then(res => res.json())
-        .then(data => {
-            renderProducts(data);
-        })
-        .catch(err => console.log("상품 불러오기 실패:", err));
-}
-
-
-/* =========================
-   상품 렌더링
-========================= */
-function renderProducts(products = []) {
-    productList.innerHTML = "";
-
-    products.forEach(product => {
-        const div = document.createElement("div");
-        div.classList.add("product-item");
-
-        div.innerHTML = `
-            <img 
-                src="${product.image}"
-                style="width:100px; height:100px; object-fit:cover; border-radius:8px;"
-            >
-
-            <h4>${product.name}</h4>
-            <p>${product.description || ""}</p>
-
-            <p>
-                <span style="text-decoration:line-through; color:gray;">
-                    ₩${Number(product.originalPrice || 0).toLocaleString()}
-                </span>
-            </p>
-
-            <p style="color:red; font-weight:bold;">
-                ₩${Number(product.salePrice || 0).toLocaleString()}
-            </p>
-
-            <hr>
-        `;
-
-        productList.appendChild(div);
-    });
-}
-
-loadProducts();
+    loadProducts();
 });
