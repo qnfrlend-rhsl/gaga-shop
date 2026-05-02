@@ -11,6 +11,11 @@
 
 <h1>🛠️ 관리자 주문 관리 페이지</h1>
 
+<div class="search-box">
+    <span class="search-icon">🔍</span>
+    <input id="order-search" type="text" placeholder="고객 검색 (이름 / 전화번호)">
+</div>
+<div id="order-filter-bar"></div>
 <div id="admin-orders"></div>
 
 <hr>
@@ -35,6 +40,11 @@
 <hr>
 
 <h3>등록된 상품</h3>
+<div class="search-box">
+    <span class="search-icon">🔍</span>
+    <input id="product-search" type="text" placeholder="상품 검색 (이름 / 설명)">
+</div>
+
 <div id="product-list" class="product-list"></div>
 
 <script src="admin.js"></script>
