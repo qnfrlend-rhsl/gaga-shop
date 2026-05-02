@@ -149,6 +149,8 @@ document.addEventListener("DOMContentLoaded", () => {
             renderAdminOrders(orders);
         };
 
+        resetBtn.classList.add("reset-btn");
+
         resetBtn.style.display = "inline-block";
         resetBtn.style.padding = "6px 10px";
         resetBtn.style.margin = "10px 0";
@@ -158,8 +160,9 @@ document.addEventListener("DOMContentLoaded", () => {
         resetBtn.style.color = "#4a6cf7";
         resetBtn.style.cursor = "pointer";
         resetBtn.style.fontSize = "14px";
-
+        
         adminOrders.appendChild(resetBtn);
+        
     }
 
     /* =========================
