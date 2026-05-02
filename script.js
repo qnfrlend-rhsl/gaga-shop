@@ -394,7 +394,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const match = order.items.find(i =>
                 String(i.productId) === String(cartItem.productId)
             );
-
+ 
             if (match) {
                 cartItem.status = match.status;
             }
