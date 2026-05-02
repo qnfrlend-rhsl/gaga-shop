@@ -315,6 +315,7 @@ document.addEventListener("DOMContentLoaded", function () {
     /* =========================
        ORDERS RENDER(주문 목록)
     ========================= */
+    /*
     function renderOrders() {
         orderHistory.innerHTML = "";
 
@@ -337,8 +338,8 @@ document.addEventListener("DOMContentLoaded", function () {
             orderHistory.appendChild(div);
         });
     }
-
-    renderOrders();
+*/
+    // renderOrders();
 
     /* =========================
        DRAG(마우스, 손가락 드레그)
@@ -375,7 +376,7 @@ document.addEventListener("DOMContentLoaded", function () {
             syncCartStatusWithOrders();
 
             localStorage.setItem("orders", JSON.stringify(orders));
-            renderOrders();
+            // renderOrders();
         });
 }
 
@@ -405,5 +406,59 @@ document.addEventListener("DOMContentLoaded", function () {
     updateCart();
 }
     window.updateOrderStatus = updateOrderStatus;
+
+document.getElementById("order-search-btn").addEventListener("click", async () => {
+
+    const keyword = document.getElementById("order-search-input").value.trim();
+
+    if (!keyword) {
+        alert("이름 또는 전화번호를 입력하세요");
+        return;
+    }
+
+    const res = await fetch(API_URL + "?action=getOrders");
+    const orders = await res.json();
+
+    const filtered = orders.filter(order =>
+        (order.name && order.name.toLowerCase().includes(keyword.toLowerCase())) ||
+        (order.phone && String(order.phone).includes(keyword))
+    );
+
+    const box = document.getElementById("order-result");
+    box.innerHTML = "";
+
+    if (filtered.length === 0) {
+        box.innerHTML = "📭 주문 내역이 없습니다";
+        return;
+    }
+
+    filtered.forEach(order => {
+        const div = document.createElement("div");
+        div.classList.add("order-item");
+        div.style.marginTop = "8px";
+
+        div.innerHTML = `
+            <strong>${order.name}</strong><br>
+            📅 ${order.date}<br>
+            🛍️ ${order.items?.map(item =>
+                `${item.name} x ${item.qty}`
+            ).join(", ") || "상품 없음"}<br>
+            📞 ${order.phone}<br>
+            📍 ${order.address}<br>
+            💰 ${Number(order.total).toLocaleString()}원<br>
+            📦 ${order.status}
+        `;
+
+        box.appendChild(div);
+    });
+});
+
+document.getElementById("order-search-input")
+.addEventListener("keypress", function(e) {
+    if (e.key === "Enter") {
+        document.getElementById("order-search-btn").click();
+    }
+});
+
 });
 
