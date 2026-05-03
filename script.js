@@ -380,7 +380,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 }
 
-    setInterval(syncOrderStatus, 2000);
+    setInterval(syncOrderStatus, 10000);
 
     function updateOrderStatus(id, status) {
     fetch(`${API_URL}?action=updateStatus&id=${id}&status=${encodeURIComponent(status)}`)
@@ -394,7 +394,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const match = order.items.find(i =>
                 String(i.productId) === String(cartItem.productId)
             );
- 
+
             if (match) {
                 cartItem.status = match.status;
             }
