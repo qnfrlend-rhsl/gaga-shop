@@ -250,7 +250,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     loadOrders();
-    setInterval(loadOrders, 3000);
+    setInterval(loadOrders, 10000);
 
     /* =========================
        상품 업로드
