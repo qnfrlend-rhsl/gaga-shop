@@ -18,23 +18,30 @@ document.addEventListener("DOMContentLoaded", () => {
     let editId = null;
     let currentFilterName = null;
     let currentImageUrl = "";
+    let lastData = "";
 
     /* =========================
        주문 불러오기
     ========================= */
     function loadOrders() {
-        fetch(API_URL + "?action=getOrders")
-            .then(res => res.json())
-            .then(data => {
+    fetch(API_URL + "?action=getOrders")
+        .then(res => res.json())
+        .then(data => {
 
-                orders = (data || []).sort((a, b) => {
-                    return new Date(b.date) - new Date(a.date);
-                });
+            const newData = JSON.stringify(data);
 
-                renderAdminOrders();
-            })
-            .catch(console.log);
-    }
+            if (newData === lastData) return; // 🔥 변경 없으면 중단
+
+            lastData = newData;
+
+            orders = (data || []).sort((a, b) => {
+                return new Date(b.date) - new Date(a.date);
+            });
+
+            renderAdminOrders();
+        })
+        .catch(console.log);
+}
 
     /* =========================
        상태 색상
@@ -86,84 +93,92 @@ document.addEventListener("DOMContentLoaded", () => {
        주문 렌더링
     ========================= */
     function renderAdminOrders(list = orders) {
-        adminOrders.innerHTML = "";
+    adminOrders.replaceChildren();
 
-        list.forEach(order => {
+    // 🔥 성능 개선 핵심
+    const fragment = document.createDocumentFragment();
 
-            let items = [];
-            try {
-                items = typeof order.items === "string"
-                    ? JSON.parse(order.items)
-                    : order.items || [];
-            } catch (e) {
-                items = [];
-            }
+    list.forEach(order => {
 
-            const div = document.createElement("div");
-            div.classList.add("order-item");
+        let items = [];
+        try {
+            items = typeof order.items === "string"
+                ? JSON.parse(order.items)
+                : order.items || [];
+        } catch (e) {
+            items = [];
+        }
 
-            div.innerHTML = `
-                <h3 class="customer-name" data-name="${order.name}" style="cursor:pointer;">
-                    ${order.name ?? "이름 없음"}
-                </h3>
+        const div = document.createElement("div");
+        div.classList.add("order-item");
 
-                📅 ${order.date ?? "-"}<br>
+        div.innerHTML = `
+            <h3 class="customer-name" data-name="${order.name}" style="cursor:pointer;">
+                ${order.name ?? "이름 없음"}
+            </h3>
 
-                <ul>
-                    ${items.map(item => `<li>${item.name} x ${item.qty}</li>`).join("")}
-                </ul>
+            📅 ${order.date ?? "-"}<br>
 
-                📞 ${order.phone ?? "-"}<br>
-                📍 ${order.address ?? "-"}<br>
+            <ul>
+                ${items.map(item => `<li>${item.name} x ${item.qty}</li>`).join("")}
+            </ul>
 
-                💰 ${(order.total ? Number(order.total) : 0).toLocaleString()}원<br>
+            📞 ${order.phone ?? "-"}<br>
+            📍 ${order.address ?? "-"}<br>
 
-                📦 <span class="status-badge ${getStatusClass(order.status)}">
-                    ${order.status || "결제대기"}
-                </span><br><br>
-            `;
+            💰 ${(order.total ? Number(order.total) : 0).toLocaleString()}원<br>
 
-            ["결제대기", "결제완료", "배송준비중", "배송중", "배송완료"].forEach(status => {
-                const btn = document.createElement("button");
-                btn.textContent = status;
-                btn.onclick = () => updateStatus(order.id, status);
-                div.appendChild(btn);
-            });
+            📦 <span class="status-badge ${getStatusClass(order.status)}">
+                ${order.status || "결제대기"}
+            </span><br><br>
+        `;
 
-            const deleteBtn = document.createElement("button");
-            deleteBtn.textContent = "삭제";
-            deleteBtn.onclick = () => deleteOrder(order.id);
-            div.appendChild(deleteBtn);
-
-            adminOrders.appendChild(div);
+        ["결제대기", "결제완료", "배송준비중", "배송중", "배송완료"].forEach(status => {
+            const btn = document.createElement("button");
+            btn.textContent = status;
+            btn.onclick = () => updateStatus(order.id, status);
+            div.appendChild(btn);
         });
 
-        // 🔥 전체 주문 보기 버튼
-        const resetBtn = document.createElement("div");
+        const deleteBtn = document.createElement("button");
+        deleteBtn.textContent = "삭제";
+        deleteBtn.onclick = () => deleteOrder(order.id);
+        div.appendChild(deleteBtn);
 
-        resetBtn.textContent = "↩ 전체 주문 보기";
+        // 🔥 기존 appendChild 대신 fragment로
+        fragment.appendChild(div);
+    });
 
-        resetBtn.onclick = () => {
-            currentFilterName = null;
-            if (filterBar) filterBar.innerHTML = "";
-            renderAdminOrders(orders);
-        };
+    // 🔥 한 번만 DOM에 붙임
+    adminOrders.appendChild(fragment);
 
-        resetBtn.classList.add("reset-btn");
+    // =========================
+    // 🔥 전체 주문 보기 버튼
+    // =========================
+    const resetBtn = document.createElement("div");
 
-        resetBtn.style.display = "inline-block";
-        resetBtn.style.padding = "6px 10px";
-        resetBtn.style.margin = "10px 0";
-        resetBtn.style.border = "1px solid #e0e0e0";
-        resetBtn.style.borderRadius = "8px";
-        resetBtn.style.background = "#fff";
-        resetBtn.style.color = "#4a6cf7";
-        resetBtn.style.cursor = "pointer";
-        resetBtn.style.fontSize = "14px";
-        
-        adminOrders.appendChild(resetBtn);
-        
-    }
+    resetBtn.textContent = "↩ 전체 주문 보기";
+
+    resetBtn.onclick = () => {
+        currentFilterName = null;
+        if (filterBar) filterBar.innerHTML = "";
+        renderAdminOrders(orders);
+    };
+
+    resetBtn.classList.add("reset-btn");
+
+    resetBtn.style.display = "inline-block";
+    resetBtn.style.padding = "6px 10px";
+    resetBtn.style.margin = "10px 0";
+    resetBtn.style.border = "1px solid #e0e0e0";
+    resetBtn.style.borderRadius = "8px";
+    resetBtn.style.background = "#fff";
+    resetBtn.style.color = "#4a6cf7";
+    resetBtn.style.cursor = "pointer";
+    resetBtn.style.fontSize = "14px";
+
+    adminOrders.appendChild(resetBtn);
+}
 
     /* =========================
        고객 클릭
@@ -250,7 +265,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     loadOrders();
-    setInterval(loadOrders, 10000);
 
     /* =========================
        상품 업로드
