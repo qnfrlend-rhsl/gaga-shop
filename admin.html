@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>가가 춘천사랑 농축임수 센터</title>
+
+    <!-- PWA -->
+    <link rel="manifest" href="./manifest.json">
+
+    <!-- 핸드폰 아이콘 -->
+    <link rel="icon" href="./로고_2.png">
+    <link rel="apple-touch-icon" href="./로고_2.png">
+
+    <meta name="theme-color" content="#ffffff">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+    <!-- 헤더 -->
+    <header class="top-header">
+        <div class="logo-box">
+            <img src="assets/로고-2.png" alt="로고" class="logo">
+            <h1 class="site-name">가가 춘천사랑 농축임수 센터</h1>
+        </div>
+    </header>
+
+<body>
+
+<h1>🛠️ 관리자 주문 관리 페이지</h1>
+
+<div class="search-box">
+    <span class="search-icon">🔍</span>
+    <input id="order-search" type="text" placeholder="고객 검색 (이름 / 전화번호)">
+</div>
+<div id="order-filter-bar"></div>
+<div id="admin-controls"></div>
+<div id="admin-orders"></div>
+
+<hr>
+
+<h2>📦 상품 관리</h2>
+
+<form id="product-form">
+        <!-- =========================
+         판매자 정보 추가
+        ========================= -->
+
+    <h3>👨‍🌾 판매자 정보</h3>
+
+    <!-- ▼▼▼ 여기부터 추가 ▼▼▼ -->
+
+    <input type="text" id="seller-name" placeholder="판매자명" required><br><br>
+    <input type="password" id="seller-password" placeholder="판매자 비밀번호" required><br><br>
+    <input type="text" id="seller-bank" placeholder="은행명" required><br><br>
+    <input type="text" id="seller-account" placeholder="계좌번호" required><br><br>
+    <input type="text" id="seller-depositor" placeholder="예금주" required><br><br>
+
+    <hr><br>
+
+    <!-- ▲▲▲ 여기까지 추가 ▲▲▲ -->
+
+    <input type="text" id="product-name" placeholder="상품명" required><br><br>
+    <input type="text" id="product-desc" placeholder="상품 설명" required><br><br>
+    <input type="number" id="product-original" placeholder="원가" required><br><br>
+    <input type="number" id="product-sale" placeholder="판매가" required><br><br>
+
+    <label for="product-image">상품 이미지</label>
+    <input type="file" id="product-image" accept="image/*"><br><br>
+
+    <button type="submit">상품 등록 / 수정</button>
+</form>
+
+<hr>
+
+<h3>등록된 상품</h3>
+<div class="search-box">
+    <span class="search-icon">🔍</span>
+    <input id="product-search" type="text" placeholder="상품 검색 (이름 / 설명)">
+</div>
+
+<div id="product-list" class="product-list"></div>
+
+<script src="admin.js"></script>
+
+
+
+</body>
+</html>

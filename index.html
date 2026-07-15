@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>가가 춘천사랑 농축임수 센터</title>
+
+    <!-- PWA -->
+    <link rel="manifest" href="./manifest.json">
+
+    <!-- 핸드폰 아이콘 -->
+    <link rel="icon" href="./로고.png">
+    <link rel="apple-touch-icon" href="./로고.png">
+
+    <meta name="theme-color" content="#ffffff">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+    <!-- 헤더 -->
+    <header class="top-header">
+        <div class="logo-box">
+            <img src="assets/로고-2.png" alt="로고" class="logo">
+            <h1 class="site-name">가가 춘천사랑 농축임수 센터</h1>
+        </div>
+    </header>
+
+    <!-- 상품 목록 -->
+    <main>
+        <section class="product">
+            <h2>우리의 제품</h2>
+            <h5>현재 농축임수 제품 판매를 위해 정성껏 준비 하고 있습니다.<br> 
+                더욱 좋은 품질과 다양한 제품을 선보이기 위해<br> 
+                꼼꼼히 준비하는 시간을 갖고 있습니다.<br>
+                만족하실 수 있는 제품으로 찾아뵙겠습니다.<br>
+                판매가 시작되는 즉시 가장 먼저 좋은 소식으로 인사 드리겠습니다.<br>
+                많은 응원과 관심 부탁드립니다. 감사합니다. ^^</h5>
+            <div id="product-list" class="product-list"></div>
+        </section>
+    </main>
+
+    <!-- 장바구니 버튼 -->
+    <button id="cart-toggle" class="cart-toggle">🛒</button>
+
+    <!-- 장바구니 -->
+    <div class="cart-box">
+
+        <h2>🛒 장바구니</h2>
+
+        <p id="cart-message" class="cart-message"></p>
+
+        <!-- 장바구니 상품 -->
+        <div id="cart-items"></div>
+
+        <!-- 총합 -->
+        <h3 id="cart-total">총합: 0원</h3>
+        <div id="cart-status"></div>
+
+        <!-- 버튼 -->
+        <button id="clear-cart">장바구니 비우기</button>
+        <button class="pay-btn">결제하기</button>
+
+        <!-- 주문조회 -->
+        <hr>
+
+        <h3>🧾 주문 조회</h3>
+
+        <div class="order-search-box">
+            <input
+                id="order-search-input"
+                type="text"
+                placeholder="이름 또는 전화번호 입력"
+            >
+            <button id="order-search-btn">주문조회</button>
+        </div>
+
+        <div id="order-result"></div>
+
+        <!-- 결제 패널 -->
+        <div id="pay-panel" class="pay-panel">
+            <div class="pay-content">
+
+                <!-- 판매자 정보 -->
+                <div class="seller-info">
+                    <h3>🏦 판매자 계좌 정보</h3>
+
+                     <div id="seller-account-list"></div>
+                </div>
+
+                <!-- 구매자 정보 -->
+                <h3>결제 정보</h3>
+
+                <input type="text" id="buyer-name" placeholder="이름">
+                <input type="text" id="buyer-address" placeholder="주소">
+                <input type="text" id="buyer-phone" placeholder="전화번호">
+
+                <h4 id="pay-total"></h4>
+
+                <p id="pay-message"></p>
+                <p id="order-status" class="order-status"></p>
+
+                <button id="pay-confirm">주문 대기</button>
+                <button id="pay-close">닫기</button>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- 상품 상세 모달 -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+
+            <span id="modal-close" class="close">&times;</span>
+
+            <img id="modal-img" alt="상품 이미지">
+            <h2 id="modal-title"></h2>
+            <p id="modal-desc"></p>
+            <h3 id="modal-price"></h3>
+
+            <button id="modal-cart-btn">장바구니 추가</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+
+</body>
+</html>

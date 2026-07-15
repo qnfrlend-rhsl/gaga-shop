@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>제품 관리</title>
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+
+<h1>제품 등록</h1>
+
+<!-- =========================
+     상품 등록 폼
+========================= -->
+<form id="product-form">
+
+    <input type="text" id="product-name" placeholder="상품명" required><br><br>
+
+    <input type="text" id="product-desc" placeholder="상품 설명" required><br><br>
+
+    <input type="number" id="product-original" placeholder="원가" required><br><br>
+
+    <input type="number" id="product-sale" placeholder="판매가" required><br><br>
+
+    <label for="product-image">상품 이미지</label>
+    <input type="file" id="product-image" accept="image/*" required><br><br>
+
+    <button type="submit">상품 등록</button>
+
+</form>
+
+<hr>
+
+<h2>등록된 상품</h2>
+<div id="product-list"></div>
+
+<!-- =========================
+     JS 연결 (중요)
+========================= -->
+<script src="product-admin.js"></script>
+
+</body>
+</html>

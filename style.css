@@ -1,0 +1,704 @@
+/* =========================
+   기본
+========================= */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    background-color: #f9f9f9;
+}
+
+html, body {
+    width: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+/* =========================
+   헤더
+========================= */
+.top-header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+
+    background: linear-gradient(90deg, #2c3e50, #34495e);
+    padding: 15px;
+    border-bottom: 2px solid #1abc9c;
+}
+
+.logo-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+}
+
+.logo {
+    width: 120px;
+    height: auto;
+    object-fit: cover;
+}
+
+.site-name {
+    font-size: 35px;
+    font-weight: bold;
+    color: white;
+    margin: 0;
+}
+
+/* =========================
+   상품 영역
+========================= */
+.product {
+    padding: 5px;
+   margin: 0;
+}
+
+/* =========================
+   상품 카드
+========================= */
+.product-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, 180px);
+    gap: 10px;
+    padding: 10px;
+    justify-content: center;
+}
+
+/* =========================
+   카드
+========================= */
+.product-item {
+    background: white;
+    border-radius: 12px;
+    padding: 8px;
+    border: 1px solid #ddd;
+
+    width: 180px;
+    box-sizing: border-box;
+
+    margin: 0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+/* 이미지 */
+.product-item img {
+    width: 100%;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+/* 텍스트 */
+.product-item h4,
+.product-item p {
+    margin: 2px 0;
+    font-size: 13px;
+}
+
+/* hover */
+.product-item:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+}
+
+.product-item:active {
+    transform: scale(0.97);
+}
+
+/* =========================
+   가격
+========================= */
+.price {
+    margin: 10px 0;
+}
+
+.original {
+    text-decoration: line-through;
+    color: #999;
+    margin-right: 8px;
+}
+
+.sale {
+    color: #e74c3c;
+    font-weight: bold;
+    font-size: 1.3em;
+}
+
+.sale::after {
+    content: "원";
+    margin-left: 2px;
+    font-size: 0.9em;
+}
+
+/* =========================
+   버튼
+========================= */
+.cart-btn {
+    margin-top: 10px;
+    padding: 8px 12px;
+    border: none;
+    background: #1abc9c;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+/* =========================
+   🛒 장바구니 (완전 안정 버전)
+========================= */
+.cart-box {
+    position: fixed;
+
+    top: 80px;
+    right: 20px;
+
+    width: 340px;
+    max-height: 70vh;
+    overflow-y: auto;
+
+    background: white;
+    padding: 15px;
+    border-radius: 12px;
+    border: 1px solid #ddd;
+
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    z-index: 9999;
+
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.1s ease;
+}
+
+.cart-box.open {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* =========================
+   cart item
+========================= */
+.cart-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 0;
+    border-bottom: 1px solid #eee;
+    font-size: 14px;
+}
+
+#cart-total {
+    color: #e74c3c;
+}
+
+/* =========================
+   결제 버튼
+========================= */
+.pay-btn {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    background: #1abc9c;
+    color: white;
+    border: none;
+    border-radius: 8px;
+}
+
+/* =========================
+   모달
+========================= */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 2000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.6);
+}
+
+.modal-content {
+    background: white;
+    width: 320px;
+    height: 450px;   /* 🔥 핵심 */
+
+    margin: 10% auto;
+    padding: 15px;
+    border-radius: 12px;
+
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; /* 🔥 넘치는 것 차단 */
+    position: relative;
+}
+
+.modal-content img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+
+    flex-shrink: 0;
+}
+
+#modal-desc {
+    font-size: 13px;
+    max-height: 60px;
+    overflow: hidden;
+}
+
+/* =========================
+   모달 닫기 버튼 (X)
+========================= */
+.close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+
+    font-size: 22px;
+    font-weight: bold;
+
+    width: 28px;
+    height: 28px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+    cursor: pointer;
+
+    background: #f5f5f5;
+    color: #333;
+}
+
+.close:hover {
+    background: #e74c3c;
+    color: white;
+}
+/* =========================
+   애니메이션
+========================= */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* =========================
+   모바일
+========================= */
+@media (max-width: 768px) {
+    #admin-orders {
+        grid-template-columns: repeat(auto-fill, 140px);
+        gap: 6px;
+    }
+    body {
+        min-height: 100vh;
+    }
+    .top-header {
+        padding: 16px 10px;
+    }
+
+    .logo {
+        width: 110px;
+        height: auto;
+        margin-right: -15px;
+    }
+
+    .site-name {
+        font-size: 24px;
+        line-height: 1.2;
+    }
+
+    .logo-box {
+        gap: 0px;
+    }
+
+    .product-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+
+    padding: 10px;
+}
+
+    .cart-box {
+    position: fixed;
+    bottom: 80px;
+    left: 5%;
+    right: 5%;
+    width: auto;
+    max-height: 60vh;
+    background: white;
+    padding: 15px;
+    border-radius: 12px;
+    border: 1px solid #ddd;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    overflow-y: auto;
+    touch-action: auto;
+    z-index: 9999;
+    }
+
+    .pay-panel {
+        align-items: flex-start;
+        padding-top: 30px;
+    }
+    
+    .pay-content {
+    width: 90%;
+    max-height: 80vh;
+
+    padding: 20px;
+    overflow-y: auto;
+
+    box-sizing: border-box;
+  }
+}
+
+/* =========================
+   장바구니 버튼
+========================= */
+.cart-toggle {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+
+    background: #d1382d;
+    color: white;
+    border: none;
+
+    font-size: 28px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+
+    z-index: 2000;
+}
+
+/* =========================
+   💳 결제 패널
+========================= */
+.pay-panel {
+    display: none;
+    position: fixed;
+    z-index: 3000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    
+    background: rgba(0,0,0,0.5);
+
+    justify-content: center;
+    align-items: center;
+}
+
+.pay-panel.active {
+    display: flex;
+}
+
+/* 결제 박스 */
+.pay-content {
+    width: 320px;
+    background: white;
+    padding: 24px;
+    border-radius: 14px;
+
+    box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+    animation: fadeIn 0.25s ease;
+}
+
+/* 제목 */
+.pay-content h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+/* 입력창 */
+.pay-content input {
+    width: 100%;
+    max-width: 300px;   /* 👈 핵심 */
+    padding: 10px;
+    margin: 0 auto 10px; /* 👈 가운데 정렬 */
+    display: block;
+
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    font-size: 14px;
+}
+
+.pay-content input:focus {
+    outline: none;
+    border-color: #1abc9c;
+    box-shadow: 0 0 0 2px rgba(26,188,156,0.2);
+}
+
+/* 💰 총 금액 */
+#pay-total {
+    text-align: right;
+    margin: 10px 0;
+    font-size: 16px;
+    color: #e74c3c;
+    font-weight: bold;
+}
+
+/* 메시지 */
+#pay-message {
+    font-size: 13px;
+    color: #666;
+}
+
+/* 주문 상태 */
+.order-status {
+    font-size: 14px;
+    margin: 10px 0;
+    color: #1abc9c;
+}
+
+/* 버튼 */
+#pay-confirm,
+#pay-close {
+    width: 100%;
+    padding: 10px;
+    margin-top: 8px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+/* 주문 완료 버튼 */
+#pay-confirm {
+    background: #1abc9c;
+    color: white;
+}
+
+/* 닫기 버튼 */
+#pay-close {
+    background: #eee;
+}
+
+/* 🏦 판매자 정보 */
+.seller-info {
+    background: #ecfdf5;
+    border: 1px solid #d1fae5;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    font-size: 13px;
+}
+
+.status-badge {
+    padding: 6px 10px;
+    border-radius: 8px;
+    font-weight: bold;
+    color: white;
+    display: inline-block;
+}
+
+.status-pending { background: gray; }
+.status-paid { background: rgb(43, 54, 218); }
+.status-ready { background: orange; }
+.status-shipping { background: purple; }
+.status-done { background: green; }
+
+
+#admin-orders {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 200px);
+    gap: 10px;
+    justify-content: start;
+}
+
+/* =========================
+   🧾 주문 카드 압축 (핵심 추가)
+========================= */
+.order-item {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+
+    padding: 6px 8px;   /* 핵심: 줄이기 */
+    margin-bottom: 6px;  /* 카드 간격 줄이기 */
+    flex-wrap: wrap;
+    flex-direction: column;
+
+    font-size: 13px;
+    line-height: 1.2;
+
+    display: flex;
+    flex-direction: column;
+    gap: 2px; /* 줄 간격 최소화 */
+}
+
+/* 제목 (이름) */
+.order-item h3 {
+    margin: 0;
+    font-size: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* 상태 뱃지 */
+.status-badge {
+    padding: 2px 6px;
+    font-size: 11px;
+    border-radius: 6px;
+}
+
+/* 상품 리스트 */
+.order-item ul {
+    margin: 4px 0;
+    padding-left: 14px;
+    font-size: 12px;
+}
+
+/* br 제거 효과 (이미 JS에서 br 많이 쓰고 있어서 압축) */
+.order-item br {
+    display: none;
+}
+
+/* 금액 강조 줄 */
+.order-item {
+    font-size: 13px;
+}
+
+/* =========================
+   버튼 영역 압축
+========================= */
+.order-item button {
+    padding: 2px 3px;
+    font-size: 12px;
+
+    margin: 2px 2px 0 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+
+    background: #f9f9f9;
+    display: inline-block;
+    align-items: center;
+    cursor: pointer;
+    line-height: 1.5;
+}
+
+/* 버튼 hover */
+.order-item button:hover {
+    background: #eee;
+}
+
+.search-box {
+    display: flex;
+    align-items: center;
+
+    max-width: 320px;
+    margin: 10px auto 20px;
+
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+
+    padding: 8px 10px;
+
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+.search-box input {
+    border: none;
+    outline: none;
+    background: transparent;
+    flex: 1;
+    font-size: 14px;
+}
+
+.search-icon {
+    font-size: 16px;
+    margin-right: 6px;
+    color: #888;
+}
+
+#order-search {
+    width: 100%;
+    border: none;
+    outline: none;
+
+    font-size: 14px;
+    background: transparent;
+}
+/* =========================
+   전체 주문 보기 버튼
+========================= */
+.reset-btn {
+    display: inline-block;
+    padding: 6px 10px;
+    margin: 10px 0;
+
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background: #fff;
+
+    color: #4a6cf7;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.reset-btn:hover {
+    background: #f5f7ff;
+}
+
+.order-search-box {
+    margin-top: 12px;
+    display: flex;
+    gap: 6px;
+}
+
+.order-search-box input {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+}
+
+.order-search-box button {
+    padding: 8px 12px;
+    border: none;
+    background: #1abc9c;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+#order-result {
+    margin-top: 12px;
+    max-height: 250px;
+    overflow-y: auto;
+    text-align: left;
+}
+
+/* =========================
+   계좌번호 복사 버튼
+========================= */
+
+.copy-account-btn {
+    margin-left: 8px;
+    padding: 5px 10px;
+    border: 1px solid #1abc9c;
+    border-radius: 6px;
+    background: #1abc9c;
+    color: #fcfcfc;
+    font-size: 13px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.copy-account-btn:hover {
+    background: #4a6cf7;
+    color: white;
+}
+
+.copy-account-btn:active {
+    transform: scale(0.95);
+}

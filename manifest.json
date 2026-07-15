@@ -1,0 +1,15 @@
+{
+  "name": "가가 춘천사랑 농축임수 센터",
+  "short_name": "가가 춘천사랑",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
+  "icons": [
+    {
+      "src": "./로고.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
