@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", function () {
     /* =========================
        API URL
     ========================= */
-    const API_URL = "https://script.google.com/macros/s/AKfycbwFzfrRWec67CwW9bKK2Ov6bJirVya06fbWCE7Xk4uOMQ1rSW0GILv5u0hmdzCF9AwZRg/exec";
+    const API_URL = "https://script.google.com/macros/s/AKfycbw0MSGygJnb7Q5EfQnMDWuF_wyOV265DmjQ0RUKtDlRH1aU1T6P5gttLPOXlRUrSr--GA/exec";
 
     /* =========================
        DOM
@@ -377,40 +377,51 @@ document.addEventListener("DOMContentLoaded", function () {
             payMessage.textContent = "⚠️ 모든 정보를 입력해주세요.";
             return;
         }
-
-        const orderId = Date.now(); 
-
         const cartWithStatus = cart.map(item => ({
-            ...item,
-            orderId: orderId,  
+            ...item, 
             status: "결제대기"
         }));
 
-        const newOrder = {
-            id: Date.now(),
-            name,
-            address,
-            phone,
-            items: cartWithStatus,
-            total: cart.reduce((s, i) => s + i.price * i.qty, 0),
-            status: "결제대기",
-            date: new Date().toLocaleString()
-        };
+        // =========================
+        // 판매자별 주문 분리 생성
+        // =========================
 
-        fetch(`${API_URL}?action=createOrder&id=${newOrder.id}&name=${encodeURIComponent(name)}&phone=${encodeURIComponent(phone)}&address=${encodeURIComponent(address)}&items=${encodeURIComponent(JSON.stringify(cartWithStatus))}&total=${newOrder.total}&status=${newOrder.status}&date=${encodeURIComponent(newOrder.date)}`)
+        const sellerOrders = {};
+        cartWithStatus.forEach(item => {
+            const seller = item.sellerName || "판매자 정보 없음";
+            if (!sellerOrders[seller]) {
+                sellerOrders[seller] = [];
+            }
+            sellerOrders[seller].push(item);
+        });
 
-            .then(res => res.text())
-            .then(() => {
-                orders.push(newOrder);
-                localStorage.setItem("orders", JSON.stringify(orders));
 
-                cart = [];
-                updateCart(); // 장바구니 갱신
-                localStorage.removeItem("cart");
-
-                payPanel.style.display = "none";
-                //renderOrders(); // 관리자 페이지 갱신
-            });
+        const orderDate = new Date().toLocaleString();
+        const requests = Object.entries(sellerOrders).map(([seller, items]) => {
+            const orderId = Date.now() + Math.floor(Math.random() * 1000);
+            const total = items.reduce(
+                (sum, item) => sum + (item.price * item.qty),
+                0
+            );
+            return fetch(
+                `${API_URL}?action=createOrder` +
+                `&id=${orderId}` +
+                `&name=${encodeURIComponent(name)}` +
+                `&phone=${encodeURIComponent(phone)}` +
+                `&address=${encodeURIComponent(address)}` +
+                `&items=${encodeURIComponent(JSON.stringify(items))}` +
+                `&total=${total}` +
+                `&status=결제대기` +
+                `&date=${encodeURIComponent(orderDate)}`
+            );
+        });
+        Promise.all(requests)
+        .then(() => {
+            cart = [];
+            updateCart();
+            localStorage.removeItem("cart");
+            payPanel.style.display = "none";
+        });
     });
 
     /* =========================

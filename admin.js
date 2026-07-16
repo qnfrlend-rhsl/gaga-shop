@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (!adminOrders) return;
 
-    const API_URL = "https://script.google.com/macros/s/AKfycbwzizx6LspV3MzAyezbzRcTCeGxpsFXv9UL7-YKxUf3r7ZawI2MC6092QYDi_eghAlOJg/exec";
+    const API_URL = "https://script.google.com/macros/s/AKfycbw0MSGygJnb7Q5EfQnMDWuF_wyOV265DmjQ0RUKtDlRH1aU1T6P5gttLPOXlRUrSr--GA/exec";
 
     let orders = [];
     let allProducts = [];   // 🔥 상품 전체 저장
@@ -183,16 +183,30 @@ document.addEventListener("DOMContentLoaded", () => {
          btn.textContent = status;
 
            btn.onclick = () => {
-        // 🔒 배송완료만 비밀번호 체크
-        if (status === "배송완료") {
-            const key = prompt("관리자 비밀번호를 입력하세요");
-            if (key !== ADMIN_KEY) {
-                alert("권한이 없습니다.");
-                return;
-                }
-            }
-             updateStatus(order.id, status);
-            };
+
+               if (status === "배송완료") {
+
+                   const sellerPassword = prompt("판매자 비밀번호를 입력하세요");
+
+                   if (!sellerPassword) {
+                       return;
+                   }
+
+                   updateStatus(
+                       order.id,
+                       status,
+                       sellerPassword
+                   );
+
+               } else {
+
+                  updateStatus(
+                       order.id,
+                       status
+                   );
+
+               }
+           };
                div.appendChild(btn);
          });
 
