@@ -30,6 +30,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const modalPrice = document.getElementById("modal-price");
     const modalCartBtn = document.getElementById("modal-cart-btn");
     const closeBtn = document.querySelector(".close");
+    const cartClose = document.getElementById("cart-close");
 
     /* =========================
        상품생성
@@ -234,8 +235,14 @@ document.addEventListener("DOMContentLoaded", function () {
     let cartOpen = false;
 
     cartToggle.addEventListener("click", () => {
-        cartOpen = !cartOpen;
-        cartBox.classList.toggle("open", cartOpen);
+    cartOpen = !cartOpen;
+    cartBox.classList.toggle("open", cartOpen);
+    });
+
+    cartClose.addEventListener("click", (e) => {
+    e.stopPropagation();
+    cartOpen = false;
+    cartBox.classList.remove("open");
     });
 
     /* =========================
