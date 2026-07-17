@@ -371,6 +371,7 @@ productForm.addEventListener("submit", async (e) => {
         // 판매자 정보
         // =========================
         const sellerName = document.getElementById("seller-name").value.trim();
+        const sellerPhone = document.getElementById("seller-phone").value.trim();
         const sellerPassword = document.getElementById("seller-password").value.trim();
         const bank = document.getElementById("seller-bank").value.trim();
         const account = document.getElementById("seller-account").value.trim();
@@ -397,6 +398,7 @@ productForm.addEventListener("submit", async (e) => {
             url =
                 `${API_URL}?action=updateProduct&id=${editId}` +
                 `&sellerName=${encodeURIComponent(sellerName)}` +
+                `&sellerPhone=${encodeURIComponent(sellerPhone)}` +
                 `&sellerPassword=${encodeURIComponent(sellerPassword)}` +
                 `&bank=${encodeURIComponent(bank)}` +
                 `&account=${encodeURIComponent(account)}` +
@@ -417,6 +419,7 @@ productForm.addEventListener("submit", async (e) => {
             url =
                 `${API_URL}?action=addProduct` +
                 `&sellerName=${encodeURIComponent(sellerName)}` +
+                `&sellerPhone=${encodeURIComponent(sellerPhone)}` +
                 `&sellerPassword=${encodeURIComponent(sellerPassword)}` +
                 `&bank=${encodeURIComponent(bank)}` +
                 `&account=${encodeURIComponent(account)}` +
@@ -500,6 +503,7 @@ productForm.addEventListener("submit", async (e) => {
     // 판매자 정보
     // =========================
     document.getElementById("seller-name").value = p.sellerName || "";
+    document.getElementById("seller-phone").value = p.sellerPhone || "";
     document.getElementById("seller-password").value = p.sellerPassword || "";
     document.getElementById("seller-bank").value = p.bank || "";
     document.getElementById("seller-account").value = p.account || "";
