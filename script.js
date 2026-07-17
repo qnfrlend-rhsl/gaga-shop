@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", function () {
     /* =========================
        API URL
     ========================= */
-    const API_URL = "https://script.google.com/macros/s/AKfycbwVmYuJhkJVExHQn7qn0hhAx5LHUTC2A3Uphj6iUM4GjhP9l8FjqcDDweOTzWwPf-cuGQ/exec";
+    const API_URL = "https://script.google.com/macros/s/AKfycbxWzVYMJUxGxhltG24T4LdA3niwgJHqKnU5iWiIV7RdDht39xyS8vzardG47LaR46igKA/exec";
 
     /* =========================
        DOM
@@ -423,6 +423,7 @@ function renderNewsTicker() {
         const name = document.getElementById("buyer-name").value;
         const address = document.getElementById("buyer-address").value;
         const phone = document.getElementById("buyer-phone").value;
+        const memo = document.getElementById("buyer-memo").value;
         const payMessage = document.getElementById("pay-message");
 
         if (!name || !address || !phone) {
@@ -461,6 +462,7 @@ function renderNewsTicker() {
                 `&name=${encodeURIComponent(name)}` +
                 `&phone=${encodeURIComponent(phone)}` +
                 `&address=${encodeURIComponent(address)}` +
+                `&memo=${encodeURIComponent(memo)}` +
                 `&items=${encodeURIComponent(JSON.stringify(items))}` +
                 `&total=${total}` +
                 `&status=결제대기` +

@@ -420,7 +420,8 @@ html, body {
 }
 
 /* 입력창 */
-.pay-content input {
+.pay-content input,
+.pay-content textarea {
     width: 100%;
     max-width: 300px;   /* 👈 핵심 */
     padding: 10px;
@@ -430,6 +431,11 @@ html, body {
     border-radius: 8px;
     border: 1px solid #ddd;
     font-size: 14px;
+}
+
+.pay-content textarea {
+    height: 90px;
+    resize: none;
 }
 
 .pay-content input:focus {

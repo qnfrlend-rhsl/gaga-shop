@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (!adminOrders) return;
 
-    const API_URL = "https://script.google.com/macros/s/AKfycbwVmYuJhkJVExHQn7qn0hhAx5LHUTC2A3Uphj6iUM4GjhP9l8FjqcDDweOTzWwPf-cuGQ/exec";
+    const API_URL = "https://script.google.com/macros/s/AKfycbxWzVYMJUxGxhltG24T4LdA3niwgJHqKnU5iWiIV7RdDht39xyS8vzardG47LaR46igKA/exec";
 
     let orders = [];
     let allProducts = [];   // 🔥 상품 전체 저장
@@ -170,6 +170,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             📞 ${order.phone ?? "-"}<br>
             📍 ${order.address ?? "-"}<br>
+            📝 메모 : ${order.memo || "-"}<br>
 
             💰 ${(order.total ? Number(order.total) : 0).toLocaleString()}원<br>
 
