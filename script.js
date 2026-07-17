@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", function () {
     /* =========================
        API URL
     ========================= */
-    const API_URL = "https://script.google.com/macros/s/AKfycbw0MSGygJnb7Q5EfQnMDWuF_wyOV265DmjQ0RUKtDlRH1aU1T6P5gttLPOXlRUrSr--GA/exec";
+    const API_URL = "https://script.google.com/macros/s/AKfycbwVmYuJhkJVExHQn7qn0hhAx5LHUTC2A3Uphj6iUM4GjhP9l8FjqcDDweOTzWwPf-cuGQ/exec";
 
     /* =========================
        DOM
