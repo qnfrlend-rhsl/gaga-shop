@@ -281,14 +281,34 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (!keyword) return renderAdminOrders(orders);
 
-        const filtered = orders.filter(order =>
-            (order.name && order.name.toLowerCase().includes(keyword)) ||
-            (order.phone && String(order.phone).includes(keyword))
-        );
+        const filtered = orders.filter(order => {
+
+            let items = [];
+
+            try {
+                items = typeof order.items === "string"
+                    ? JSON.parse(order.items)
+                    : order.items || [];
+            } catch (e) {
+                items = [];
+            }
+
+            return (
+                (order.name && order.name.toLowerCase().includes(keyword)) ||
+                (order.phone && String(order.phone).includes(keyword)) ||
+                items.some(item =>
+                    (item.sellerName &&
+                        item.sellerName.toLowerCase().includes(keyword)) ||
+                    (item.name &&
+                        item.name.toLowerCase().includes(keyword))
+                )
+            );
+        });
 
         renderAdminOrders(filtered);
-      }, 200);
-    });
+
+    }, 200);
+});
 
     /* =========================
        🔥 상품 검색 (고객검색 동일 구조)

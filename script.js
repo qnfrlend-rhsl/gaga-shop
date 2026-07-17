@@ -158,7 +158,7 @@ function renderNewsTicker() {
 
         html += `
             <span class="news">
-                👨‍🌾 ${product.name} 👉
+                👉 ${product.name} 👨‍🌾 
                 ${product.sellerName} |
                 ${product.description}
                 ${Number(product.salePrice).toLocaleString()}원 판매중!
@@ -170,7 +170,7 @@ function renderNewsTicker() {
     // 마지막 안내
     html += `
         <span class="event">
-            🎉 신규 판매자를 모집합니다.
+            🎉 신규 판매자 등록을 진행하고 있습니다 (관리자: 010 8429 5368).
         </span>
     `;
 
