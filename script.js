@@ -57,6 +57,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 image: p.image
             }));
             renderProducts();
+            renderNewsTicker();
         });
 
     /* =========================
@@ -130,7 +131,51 @@ document.addEventListener("DOMContentLoaded", function () {
     cart = cart.filter(item => String(item.productId) !== String(productId));
     updateCart();
 }
+    
+    /* =========================
+   뉴스 티커 생성
+========================= */
 
+function renderNewsTicker() {
+
+    const ticker = document.getElementById("newsTicker");
+
+    if (!ticker) return;
+
+    let html = "";
+
+    // 시작 안내
+    html += `
+    <span class="news">
+        <span style="color:#FFD54F;">
+            🚚 <strong>농축임수 센터에서 신선한 상품을 만나보세요 </strong>&gt;&gt;
+        </span>
+    </span>
+    `;
+
+    // 등록된 상품 자동 출력
+    products.forEach(product => {
+
+        html += `
+            <span class="news">
+                👨‍🌾 ${product.name} 👉
+                ${product.sellerName} |
+                ${product.description}
+                ${Number(product.salePrice).toLocaleString()}원 판매중!
+            </span>
+        `;
+
+    });
+
+    // 마지막 안내
+    html += `
+        <span class="event">
+            🎉 신규 판매자를 모집합니다.
+        </span>
+    `;
+
+    ticker.innerHTML = html;
+}
     /* =========================
        상품리스트(표시, 출력)
     ========================= */
