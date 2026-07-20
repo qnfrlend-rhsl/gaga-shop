@@ -414,7 +414,7 @@ function renderNewsTicker() {
     ========================= */
     payConfirm.addEventListener("click", () => {
         const status = document.getElementById("order-status");
-        status.textContent = "주문 대기 중...";
+        status.textContent = "주문 완료 중...";
 
         setTimeout(() => {
             status.textContent = "주문 완료 ✔";
