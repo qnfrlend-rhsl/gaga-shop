@@ -71,13 +71,13 @@ html, body {
 /* =========================
    카드
 ========================= */
-.product-item {
+#product-list .product-item {
     background: white;
     border-radius: 12px;
     padding: 8px;
     border: 1px solid #ddd;
 
-    width: 180px;
+    width: 170px;
     box-sizing: border-box;
 
     margin: 0;
@@ -92,13 +92,25 @@ html, body {
     border-radius: 8px;
 }
 
-/* 텍스트 */
-.product-item h4,
+/*////////////////////////////////////////////////// 고객용 상품 카드 글자간격, 크기 조절 */
+.product-item h3,
 .product-item p {
-    margin: 2px 0;
-    font-size: 13px;
+    margin: 0px;
+    font-size: 15px;
+    line-height: 2;
 }
-
+/*////////////////////////////////////////////////// 관리용 상품 카드 글자간격, 크기 조절 */
+.product-item h4 {
+    margin: 0px;
+    font-size: 15px;
+    line-height: 1.5;
+}
+/*////////////////////////////// 고객용과 관리용 상품 카드 상품설명 내용 글자간격, 크기 조절 */
+.product-item p {
+    margin: 0px;
+    font-size: 12px;
+    line-height: 1.5;
+}
 /* hover */
 .product-item:hover {
     transform: translateY(-6px);
@@ -322,7 +334,7 @@ html, body {
     justify-content: center;
     gap: 2px;   /*   /////////////////////////////////////////////////// 핸드폰 카드 크기 조절 */
 
-    padding: 10px;
+    padding: 5px;
 }
 
     .cart-box {

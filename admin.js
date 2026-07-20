@@ -470,9 +470,9 @@ productForm.addEventListener("submit", async (e) => {
     }
 });
 
-    /* =========================
-       상품 로드
-    ========================= */
+    /* ============================================
+       상품 로드 관리자 판매 가격 글자크기 조절하는 곳
+    =============================================== */
     function loadProducts() {
         fetch("https://opensheet.elk.sh/1XKQa35tuBMYaaucXvBf6YNw2F42EY584zSQFHYc8qfc/products")
             .then(res => res.json())
@@ -498,12 +498,12 @@ productForm.addEventListener("submit", async (e) => {
 
             <p>${p.description || ""}</p>
 
-            <div style="margin-top:6px;">
-                <span style="text-decoration:line-through;color:#999;">
+            <div style="margin-top:2px;">   
+                <span style="text-decoration:line-through;color:#999;font-size:14px;">
                     ${p.originalPrice ? Number(p.originalPrice).toLocaleString() + "원" : ""}
                 </span>
 
-                <b style="margin-left:6px;color:#ff4d4f;">
+                <b style="margin-left:6px;color:#ff4d4f;font-size:17px;">
                     ${p.salePrice ? Number(p.salePrice).toLocaleString() + "원" : ""}
                 </b>
             </div>
@@ -543,6 +543,7 @@ productForm.addEventListener("submit", async (e) => {
 
         const deleteBtn = document.createElement("button");
         deleteBtn.textContent = "삭제";
+        deleteBtn.style.marginTop = "5px";
         deleteBtn.style.marginLeft = "5px";
 
         deleteBtn.onclick = (e) => {
