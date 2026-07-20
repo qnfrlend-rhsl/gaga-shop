@@ -320,7 +320,7 @@ html, body {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 10px;
+    gap: 2px;   /*   /////////////////////////////////////////////////// 핸드폰 카드 크기 조절 */
 
     padding: 10px;
 }
