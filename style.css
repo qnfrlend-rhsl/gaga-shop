@@ -526,10 +526,10 @@ html, body {
 .status-done { background: green; }
 
 
-#admin-orders {
+#admin-orders {        /* ================================ 주문 카드와 카드 사이 간격을 조절하는 코드 */
     display: grid;
     grid-template-columns: repeat(auto-fill, 200px);
-    gap: 2px;
+    gap: 0px;
     justify-content: start;
 }
 
