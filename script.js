@@ -386,7 +386,7 @@ function renderNewsTicker() {
             <b>${sellerTotal.toLocaleString()}원</b>
             </p>
             <p>
-            예금주 : ${seller.depositor}
+            예금주 : ${seller.depositor}<br>(택배 요청 시 배송비가 발생할 수 있어요.)
             </p>
         `;
         const copyBtn =
