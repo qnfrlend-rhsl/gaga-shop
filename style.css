@@ -304,7 +304,8 @@ html, body {
 @media (max-width: 768px) {
     #admin-orders {
         grid-template-columns: repeat(auto-fill, 140px);
-        gap: 6px;
+        gap: 2px;
+        justify-content: start;
     }
     body {
         min-height: 100vh;
@@ -528,7 +529,7 @@ html, body {
 #admin-orders {
     display: grid;
     grid-template-columns: repeat(auto-fill, 200px);
-    gap: 10px;
+    gap: 2px;
     justify-content: start;
 }
 
@@ -541,7 +542,7 @@ html, body {
     border-radius: 10px;
 
     padding: 6px 8px;   /* 핵심: 줄이기 */
-    margin-bottom: 6px;  /* 카드 간격 줄이기 */
+    margin-bottom: 2px;  /* 카드 간격 줄이기 */
     flex-wrap: wrap;
     flex-direction: column;
 
