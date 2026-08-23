@@ -159,7 +159,7 @@ function renderNewsTicker() {
         html += `
             <span class="news">
                 👉 ${product.name} 👨‍🌾 
-                ${product.sellerName} |
+                ${product.sellerName}님 |
                 ${product.description}
                 ${Number(product.salePrice).toLocaleString()}원 판매중!
             </span>
