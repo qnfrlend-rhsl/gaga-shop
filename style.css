@@ -39,6 +39,7 @@ html, body {
     width: 120px;
     height: auto;
     object-fit: cover;
+    margin-left: -40px;
 }
 
 .site-name {
