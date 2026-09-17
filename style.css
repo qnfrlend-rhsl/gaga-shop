@@ -816,3 +816,16 @@ html, body {
         transform: translateX(-100%);
     }
 }
+
+.admin-link,
+.customer-link {
+    margin-left: auto;
+    font-size: 14px;
+    color: #fff;
+    text-decoration: none;
+}
+
+.admin-link:hover,
+.customer-link:hover {
+    text-decoration: underline;
+}
