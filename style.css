@@ -323,9 +323,9 @@ html, body {
     }
 
     .logo {
-        width: 110px;
+        width: 70px;
         height: auto;
-        margin-right: -15px;
+        margin-right: 0px;
     }
 
     .site-name {
