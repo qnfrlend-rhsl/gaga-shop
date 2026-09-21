@@ -36,16 +36,14 @@ html, body {
 }
 
 .logo {
-    width: 80px !important;
+    width: 120px;
     height: auto;
-    object-fit: contain;
-    margin-left: 0 !important;
-    margin-right: 0 !important;
-    transform: translateX(-20px);
+    object-fit: cover;
+    margin-left: -40px;
 }
 
 .site-name {
-    font-size: 10px;
+    font-size: 22px;
     font-weight: bold;
     color: white;
     margin: 0;
@@ -53,9 +51,9 @@ html, body {
 
 .site-name span {
     display: block;
-    font-size: 40px;
+    font-size: 50px;
     color: #51ec56;
-    margin-top: 0px;
+    margin-top: -10px;
 }
 
 /* =========================
