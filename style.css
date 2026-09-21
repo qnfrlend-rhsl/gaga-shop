@@ -49,11 +49,11 @@ html, body {
     margin: 0;
 }
 
-.site-name span {
+.site-name span {      /*  춘천사랑 농축임수 직거래장터 관련 코드 */
     display: block;
     font-size: 40px;
     color: #51ec56;
-    margin-top: -10px;
+    margin-top: 0px;
 }
 
 /* =========================
