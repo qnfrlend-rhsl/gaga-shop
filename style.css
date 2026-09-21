@@ -36,7 +36,7 @@ html, body {
 }
 
 .logo {
-    width: 120px;
+    width: 100px;
     height: auto;
     object-fit: cover;
     margin-left: -40px;
@@ -53,7 +53,7 @@ html, body {
     display: block;
     font-size: 40px;
     color: #51ec56;
-    margin-top: 0px;
+    margin-top: 0px;  /*  춘천사랑 농축임수 와 직거래장터 사이 간격 코드 */
 }
 
 /* =========================
