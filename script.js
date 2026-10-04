@@ -8,6 +8,65 @@ document.addEventListener("DOMContentLoaded", function () {
     ========================= */
     const API_URL = "https://script.google.com/macros/s/AKfycbxWzVYMJUxGxhltG24T4LdA3niwgJHqKnU5iWiIV7RdDht39xyS8vzardG47LaR46igKA/exec";
 
+// 현재 장터 지역
+let currentRegion = "춘천";
+
+// 장터 이름 변경
+function updateMarketName() {
+
+    const baseRegion = currentRegion
+        .replace(/(시|군|도)$/, "");
+
+    const marketName =
+        `${baseRegion}사랑 농축임수`;
+
+    const marketNameElement =
+        document.getElementById("market-name");
+
+    if (marketNameElement) {
+        marketNameElement.textContent = marketName;
+    }
+
+    document.title =
+        `${marketName} 직거래장터`;
+}
+
+updateMarketName();
+
+
+// =========================
+// 지역 검색
+// =========================
+const regionSearchInput =
+    document.getElementById("region-search-input");
+
+const regionSearchBtn =
+    document.getElementById("region-search-btn");
+
+function searchRegion() {
+
+    const region = regionSearchInput.value.trim();
+
+    if (!region) {
+        alert("지역을 입력해주세요.");
+        return;
+    }
+
+    currentRegion = region;
+
+    updateMarketName();
+    renderRegionProducts();
+}
+
+regionSearchBtn.addEventListener("click", searchRegion);
+
+regionSearchInput.addEventListener("keypress", function(e) {
+
+    if (e.key === "Enter") {
+        searchRegion();
+    }
+
+});
     /* =========================
        DOM
     ========================= */
@@ -36,29 +95,47 @@ document.addEventListener("DOMContentLoaded", function () {
        상품생성
     ========================= */
     let products = [];
+    let allProducts = [];
 
-    fetch("https://opensheet.elk.sh/1XKQa35tuBMYaaucXvBf6YNw2F42EY584zSQFHYc8qfc/products")
-        .then(res => res.json())
-        .then(data => {
-            products = data.map(p => ({
-                id: String(p.id || p.name),
+fetch("https://opensheet.elk.sh/1XKQa35tuBMYaaucXvBf6YNw2F42EY584zSQFHYc8qfc/products")
+    .then(res => res.json())
+    .then(data => {
 
-                // 판매자 정보
-                sellerName: p.sellerName,
-                bank: p.bank,
-                account: p.account,
-                depositor: p.depositor,
+        allProducts = data.map(p => ({
+            id: String(p.id || p.name),
+            sellerName: p.sellerName,
+            bank: p.bank,
+            account: p.account,
+            depositor: p.depositor,
+            name: p.name,
+            description: p.description,
+            originalPrice: Number(p.originalPrice),
+            salePrice: Number(p.salePrice),
+            image: p.image,
+            region: p.region
+        }));
 
-                // 상품 정보
-                name: p.name,
-                description: p.description,
-                originalPrice: Number(p.originalPrice),
-                salePrice: Number(p.salePrice),
-                image: p.image
-            }));
-            renderProducts();
-            renderNewsTicker();
-        });
+        renderRegionProducts();
+    });
+
+    function renderRegionProducts() {
+
+    const searchRegion =
+        currentRegion.trim().replace(/(시|군|도)$/, "");
+
+    products = allProducts.filter(p => {
+
+        const productRegion =
+            String(p.region || "")
+                .trim()
+                .replace(/(시|군|도)$/, "");
+
+        return productRegion === searchRegion;
+    });
+
+    renderProducts();
+    renderNewsTicker();
+}
 
     /* =========================
        장바구니 상태
@@ -139,26 +216,23 @@ document.addEventListener("DOMContentLoaded", function () {
 function renderNewsTicker() {
 
     const ticker = document.getElementById("newsTicker");
-
     if (!ticker) return;
 
     let html = "";
 
-    // 시작 안내
     html += `
-    <span class="news">
-        <span style="color:#FFD54F;">
-            🚚 <strong>농축임수 센터에서 신선한 상품을 만나보세요 </strong>&gt;&gt;
+        <span class="news">
+            <span style="color:#FFD54F;">
+                🚚 <strong>농축임수 센터에서 신선한 상품을 만나보세요 </strong>&gt;&gt;
+            </span>
         </span>
-    </span>
     `;
 
-    // 등록된 상품 자동 출력
     products.forEach(product => {
 
         html += `
             <span class="news">
-                👉 ${product.name} 👨‍🌾 
+                👉 ${product.name} 👨‍🌾
                 ${product.sellerName}님 |
                 ${product.description}
                 ${Number(product.salePrice).toLocaleString()}원 판매중!
@@ -167,7 +241,6 @@ function renderNewsTicker() {
 
     });
 
-    // 마지막 안내
     html += `
         <span class="event">
             🎉 신규 판매자 등록을 진행하고 있습니다 (관리자: 010 8429 5368).
@@ -175,6 +248,15 @@ function renderNewsTicker() {
     `;
 
     ticker.innerHTML = html;
+
+    // 상품 수와 관계없이 일정한 이동 속도 유지
+    const tickerWidth = ticker.scrollWidth;
+
+    const speed = 80; // 1초에 이동할 픽셀
+
+    const duration = tickerWidth / speed;
+
+    ticker.style.animationDuration = `${duration}s`;
 }
     /* =========================
        상품리스트(표시, 출력)

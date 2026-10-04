@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>춘천사랑 농축임수 직거래장터</title>
+    <title>농축임수 직거래장터</title>
 
     <!-- PWA -->
     <link rel="manifest" href="./manifest.json">
@@ -23,8 +23,8 @@
         <div class="logo-box">
             <img src="assets/로고-2.png" alt="로고" class="logo">
             <h3 class="site-name">
-              춘천사랑 농축임수
-              <span>직거래장터</span>
+              <span id="market-name">농축임수</span>
+              <span style="color: #1dfc00;">직거래장터</span>
             </h3>
         </div>
 
@@ -33,7 +33,18 @@
 
     <!-- 상품 목록 -->
     <main>
-        <section class="product">
+            <section class="product">
+
+        <!-- 지역 검색 -->
+        <div class="search-box">
+            <span class="search-icon">🔍</span>
+            <input
+                id="region-search-input"
+                type="text"
+                placeholder="지역 검색 (예: 춘천, 원주, 홍천)"
+            >
+            <button id="region-search-btn">검색</button>
+        </div>
             <h2>우리의 제품</h2>
             <h5>현재 농축임수 제품 판매를 위해 정성껏 준비 하고 있습니다.<br> 
                 더욱 좋은 품질과 다양한 상품을 선보이기 위해<br> 

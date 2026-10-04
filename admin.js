@@ -397,6 +397,14 @@ productForm.addEventListener("submit", async (e) => {
         const bank = document.getElementById("seller-bank").value.trim();
         const account = document.getElementById("seller-account").value.trim();
         const depositor = document.getElementById("seller-depositor").value.trim();
+        // 상품 지역
+        const region = document.getElementById("product-region").value.trim();
+
+if (!region) {
+    alert("지역을 입력해주세요.");
+    return;
+}
+
         // =========================
         // 상품 정보
         // =========================
@@ -429,6 +437,7 @@ productForm.addEventListener("submit", async (e) => {
                 `&originalPrice=${encodeURIComponent(original)}` +
                 `&salePrice=${encodeURIComponent(sale)}` +
                 `&image=${encodeURIComponent(imageUrl)}`;
+                `&region=${encodeURIComponent(region)}`;
 
             // 수정 완료 후 상태 초기화
             editMode = false;
@@ -450,6 +459,7 @@ productForm.addEventListener("submit", async (e) => {
                 `&originalPrice=${encodeURIComponent(original)}` +
                 `&salePrice=${encodeURIComponent(sale)}` +
                 `&image=${encodeURIComponent(imageUrl)}`;
+                `&region=${encodeURIComponent(region)}`;
                     }
 
         await fetch(url);
@@ -494,6 +504,10 @@ productForm.addEventListener("submit", async (e) => {
         div.innerHTML = `
             <img src="${p.image}" style="width:140px;height:100px;object-fit:cover;border-radius:8px;">
 
+            <p style="margin:5px 0;font-weight:bold;color:#4a6cf7;">
+                📍 ${p.region || "지역 미등록"}
+            </p>
+
             <h4>${p.name}</h4>
 
             <p>${p.description || ""}</p>
@@ -528,7 +542,8 @@ productForm.addEventListener("submit", async (e) => {
     document.getElementById("seller-password").value = p.sellerPassword || "";
     document.getElementById("seller-bank").value = p.bank || "";
     document.getElementById("seller-account").value = p.account || "";
-    document.getElementById("seller-depositor").value = p.depositor || "";
+    
+    document.getElementById("product-region").value = p.region || "";
 
     // =========================
     // 상품 정보
