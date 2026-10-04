@@ -449,9 +449,9 @@ function renderNewsTicker() {
             <hr>
             <h4>👨‍🌾 판매자 : ${seller.sellerName}</h4>
             <p>
-            🛒 상품<br>
+            🛒 <strong>결제 상품</strong><br><br>
             ${seller.items.map(item =>
-                `- ${item.name} × ${item.qty}`
+                `${item.name}　${item.qty}개　${(item.price * item.qty).toLocaleString()}원`
             ).join("<br>")}
             </p>
             <p>
