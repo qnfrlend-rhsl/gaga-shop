@@ -437,6 +437,10 @@ function renderNewsTicker() {
         <p style="color:#ff4d4f;">
         ⚠ 판매자가 다른 상품은 판매자별로 각각 입금해 주세요.
         </p>
+                <p class="event-privacy-notice" style="font-size: 10px; color: #ff4500; font-weight: bold; text-align: center;">
+            주문 결제 시 개인정보 제공에 동의한 것으로 간주됩니다.<br>
+            개인정보는 판매자에게 제공됨을 알려드립니다.
+         </p>
     `;
     Object.values(sellerGroup).forEach(seller => {
         const sellerTotal = seller.items.reduce(
