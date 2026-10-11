@@ -439,7 +439,8 @@ function renderNewsTicker() {
         </p>
                 <p class="event-privacy-notice" style="font-size: 10px; color: #ff4500; font-weight: bold; text-align: center;">
             주문 결제 시 개인정보 제공에 동의한 것으로 간주됩니다.<br>
-            개인정보는 판매자에게 제공됨을 알려드립니다.
+            개인정보는 판매자에게 제공됨을 알려드립니다.<br>
+            (배송책임관리자: 박제용)
          </p>
     `;
     Object.values(sellerGroup).forEach(seller => {
@@ -720,7 +721,7 @@ document.getElementById("order-search-input")
 function goAdmin() {
     const password = prompt("관리자 비밀번호를 입력하세요.");
 
-    if (password === "132482") {
+    if (password === "8282") {
         window.location.href = "admin.html";
     } else if (password !== null) {
         alert("비밀번호가 올바르지 않습니다.");
