@@ -11,6 +11,9 @@ document.addEventListener("DOMContentLoaded", function () {
 // 현재 장터 지역
 let currentRegion = "춘천";
 
+// 현재 선택한 상품 분류
+let currentCategory = "";
+
 // 장터 이름 변경
 function updateMarketName() {
 
@@ -58,6 +61,41 @@ function searchRegion() {
     renderRegionProducts();
 }
 
+// =========================
+// 상품 분류 버튼
+// =========================
+const categoryFilter =
+    document.getElementById("product-category-filter");
+
+if (categoryFilter) {
+
+    const categoryButtons =
+        categoryFilter.querySelectorAll("button");
+
+    const allButton =
+        categoryFilter.querySelector('[data-category=""]');
+
+    if (allButton) {
+        allButton.classList.add("active");
+    }
+
+    categoryButtons.forEach(button => {
+
+        button.addEventListener("click", function () {
+
+            currentCategory = this.dataset.category || "";
+
+            categoryButtons.forEach(btn => {
+                btn.classList.remove("active");
+            });
+
+            this.classList.add("active");
+
+            renderRegionProducts();
+        });
+
+    });
+}
 regionSearchBtn.addEventListener("click", searchRegion);
 
 regionSearchInput.addEventListener("keypress", function(e) {
@@ -112,7 +150,8 @@ fetch("https://opensheet.elk.sh/1XKQa35tuBMYaaucXvBf6YNw2F42EY584zSQFHYc8qfc/pro
             originalPrice: Number(p.originalPrice),
             salePrice: Number(p.salePrice),
             image: p.image,
-            region: p.region
+            region: p.region,
+            category: p.category
         }));
 
         renderRegionProducts();
@@ -130,7 +169,16 @@ fetch("https://opensheet.elk.sh/1XKQa35tuBMYaaucXvBf6YNw2F42EY584zSQFHYc8qfc/pro
                 .trim()
                 .replace(/(시|군|도)$/, "");
 
-        return productRegion === searchRegion;
+            const regionMatch =
+                productRegion === searchRegion;
+
+        const categoryMatch =
+        !currentCategory ||
+        String(p.category || "").trim() === currentCategory;
+
+        return regionMatch && categoryMatch;
+
+
     });
 
     renderProducts();
@@ -223,7 +271,7 @@ function renderNewsTicker() {
     html += `
         <span class="news">
             <span style="color:#FFD54F;">
-                🚚 <strong>농축임수 센터에서 신선한 상품을 만나보세요 </strong>&gt;&gt;
+                🚚 <strong>"농축임수 직거래장터"에서 신선한 상품을 만나보세요 </strong>&gt;&gt;
             </span>
         </span>
     `;

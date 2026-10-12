@@ -325,7 +325,10 @@ document.addEventListener("DOMContentLoaded", () => {
         const filtered = allProducts.filter(p => {
             return (
                 (p.name && p.name.toLowerCase().includes(keyword)) ||
-                (p.description && p.description.toLowerCase().includes(keyword))
+                (p.description && p.description.toLowerCase().includes(keyword)) ||
+                (p.region && p.region.toLowerCase().includes(keyword)) ||
+                (p.category && p.category.toLowerCase().includes(keyword))
+
             );
         });
 
@@ -400,10 +403,18 @@ productForm.addEventListener("submit", async (e) => {
         // 상품 지역
         const region = document.getElementById("product-region").value.trim();
 
-if (!region) {
-    alert("지역을 입력해주세요.");
-    return;
-}
+        // 상품 분류
+        const category = document.getElementById("product-category").value;
+
+        if (!region) {
+            alert("지역을 입력해주세요.");
+            return;
+        }
+
+        if (!category) {
+            alert("상품 분류를 선택해주세요.");
+            return;
+        }
 
         // =========================
         // 상품 정보
@@ -436,8 +447,9 @@ if (!region) {
                 `&description=${encodeURIComponent(desc)}` +
                 `&originalPrice=${encodeURIComponent(original)}` +
                 `&salePrice=${encodeURIComponent(sale)}` +
-                `&image=${encodeURIComponent(imageUrl)}`;
-                `&region=${encodeURIComponent(region)}`;
+                `&image=${encodeURIComponent(imageUrl)}` +
+                `&region=${encodeURIComponent(region)}` +
+                `&category=${encodeURIComponent(category)}`;
 
             // 수정 완료 후 상태 초기화
             editMode = false;
@@ -458,20 +470,20 @@ if (!region) {
                 `&description=${encodeURIComponent(desc)}` +
                 `&originalPrice=${encodeURIComponent(original)}` +
                 `&salePrice=${encodeURIComponent(sale)}` +
-                `&image=${encodeURIComponent(imageUrl)}`;
-                `&region=${encodeURIComponent(region)}`;
+                `&image=${encodeURIComponent(imageUrl)}` +
+                `&region=${encodeURIComponent(region)}` +
+                `&category=${encodeURIComponent(category)}`;
                     }
 
         await fetch(url);
-
         productForm.reset();
+
         if (!editMode) {
         currentImageUrl = "";
         }
 
         editMode = false;
         editId = null;
-
         loadProducts();
 
     } catch (err) {
@@ -507,6 +519,10 @@ if (!region) {
             <p style="margin:5px 0;font-weight:bold;color:#4a6cf7;">
                 📍 ${p.region || "지역 미등록"}
             </p>
+
+            <p style="margin:5px 0;color:#16803c;">
+                🏷️ ${p.category || "분류 미등록"}
+                </p>
 
             <h4>${p.name}</h4>
 
@@ -544,6 +560,8 @@ if (!region) {
     document.getElementById("seller-account").value = p.account || "";
     
     document.getElementById("product-region").value = p.region || "";
+    document.getElementById("product-category").value =
+    p.category || "";
 
     // =========================
     // 상품 정보

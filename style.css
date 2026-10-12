@@ -829,3 +829,43 @@ html, body {
 .customer-link:hover {
     text-decoration: underline;
 }
+/*//////////////////////////////////////////////////////////// 농축임수, 시골바누니, 기타 색상 코드*/
+#product-category-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin: 12px 0;
+}
+
+#product-category-filter button {
+    padding: 5px 10px;
+    border: 1px solid currentColor;
+    border-radius: 5px;
+    background: #fff;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1.3;
+    cursor: pointer;
+}
+
+.cat-all      { color: #495057; }
+.cat-farm     { color: #4B8B3B; }
+.cat-livestock { color: #A66A42; }
+.cat-forest   { color: #26734D; }
+.cat-sea      { color: #2878B5; }
+.cat-basket   { color: #C18A25; }
+.cat-ready    { color: #7656A5; }
+.cat-other    { color: #707780; }
+
+#product-category-filter button.active {
+    color: #fff;
+}
+
+#product-category-filter .cat-all.active { background: #495057; }
+#product-category-filter .cat-farm.active { background: #4B8B3B; }
+#product-category-filter .cat-livestock.active { background: #A66A42; }
+#product-category-filter .cat-forest.active { background: #26734D; }
+#product-category-filter .cat-sea.active { background: #2878B5; }
+#product-category-filter .cat-basket.active { background: #C18A25; }
+#product-category-filter .cat-ready.active { background: #7656A5; }
+#product-category-filter .cat-other.active { background: #707780; }
