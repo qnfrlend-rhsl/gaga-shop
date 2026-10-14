@@ -16,6 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let orders = [];
     let allProducts = [];   // 🔥 상품 전체 저장
+    let editSellerPassword = "";
     let editMode = false;
     let editId = null;
     let currentFilterName = null;
@@ -437,6 +438,7 @@ productForm.addEventListener("submit", async (e) => {
         if (editMode) {
             url =
                 `${API_URL}?action=updateProduct&id=${editId}` +
+                `&currentSellerPassword=${encodeURIComponent(editSellerPassword)}` +
                 `&sellerName=${encodeURIComponent(sellerName)}` +
                 `&sellerPhone=${encodeURIComponent(sellerPhone)}` +
                 `&sellerPassword=${encodeURIComponent(sellerPassword)}` +
@@ -475,15 +477,30 @@ productForm.addEventListener("submit", async (e) => {
                 `&category=${encodeURIComponent(category)}`;
                     }
 
-        await fetch(url);
-        productForm.reset();
+        // 서버에 저장 요청
+        const response = await fetch(url);
+        const result = (await response.text()).trim();
 
-        if (!editMode) {
-        currentImageUrl = "";
+        // 수정인지 신규 등록인지 확인
+        const expectedResult = url.includes("action=updateProduct")
+            ? "PRODUCT_UPDATED"
+            : "PRODUCT_CREATED";
+
+        // 서버 저장 결과 확인
+        if (result !== expectedResult) {
+            alert("저장 실패: " + result);
+            return;
         }
 
+        // 저장 성공 후에만 초기화
+        alert("상품 정보가 저장되었습니다.");
+
+        productForm.reset();
+        currentImageUrl = "";
         editMode = false;
         editId = null;
+        editSellerPassword = "";
+
         loadProducts();
 
     } catch (err) {
@@ -547,6 +564,9 @@ productForm.addEventListener("submit", async (e) => {
         return;
     }
 
+    // 기존 비밀번호 보관
+    editSellerPassword = password;
+
     editMode = true;
     editId = p.id;
 
@@ -555,7 +575,7 @@ productForm.addEventListener("submit", async (e) => {
     // =========================
     document.getElementById("seller-name").value = p.sellerName || "";
     document.getElementById("seller-phone").value = p.sellerPhone || "";
-    document.getElementById("seller-password").value = p.sellerPassword || "";
+    document.getElementById("seller-password").value = "";
     document.getElementById("seller-bank").value = p.bank || "";
     document.getElementById("seller-account").value = p.account || "";
     
