@@ -179,38 +179,40 @@ document.addEventListener("DOMContentLoaded", () => {
                 ${order.status || "결제대기"}
             </span><br><br>
         `;
+            
+        
+        
+          ["결제대기", "결제완료", "배송준비중", "배송중", "배송완료"].forEach(status => {
+              const btn = document.createElement("button");
+              btn.textContent = status;
 
-        ["결제대기", "결제완료", "배송준비중", "배송중", "배송완료"].forEach(status => {
-        const btn = document.createElement("button");
-         btn.textContent = status;
+              btn.onclick = () => {
+                  let key = "";
 
-           btn.onclick = () => {
+                  if (status === "배송완료") {
+                      key = prompt("관리자 비밀번호를 입력하세요");
 
-               if (status === "배송완료") {
+                      if (key === null || key === "") {
+                          return;
+                      }
 
-                   const sellerPassword = prompt("판매자 비밀번호를 입력하세요");
+                      if (key !== ADMIN_KEY) {
+                          alert("관리자 비밀번호가 올바르지 않습니다.");
+                          return;
+                      }
 
-                   if (!sellerPassword) {
-                       return;
-                   }
+                      if (!confirm("배송완료로 변경할까요?")) {
+                          return;
+                      }
+                  }
 
-                   updateStatus(
-                       order.id,
-                       status,
-                       sellerPassword
-                   );
+                  updateStatus(order.id, status, key);
+              };
 
-               } else {
+              div.appendChild(btn);
+          });
 
-                  updateStatus(
-                       order.id,
-                       status
-                   );
 
-               }
-           };
-               div.appendChild(btn);
-         });
 
         const deleteBtn = document.createElement("button");
         deleteBtn.textContent = "삭제";
@@ -339,13 +341,49 @@ document.addEventListener("DOMContentLoaded", () => {
     /* =========================
        상태 변경
     ========================= */
-    function updateStatus(id, status) {
-        const cleanedId = String(id).replace(/\D/g, "");
+    
+    
+    function updateStatus(id, status, adminPassword = "") {
+    const cleanedId = String(id).replace(/\D/g, "");
 
-        fetch(`${API_URL}?action=updateStatus&id=${cleanedId}&status=${encodeURIComponent(status)}`)
-            .then(() => loadOrders())
-            .catch(console.log);
+    const params = new URLSearchParams({
+        action: "updateStatus",
+        id: cleanedId,
+        status: status
+    });
+
+    // 배송완료일 때 관리자 비밀번호 전달
+    if (status === "배송완료") {
+        params.set("adminPassword", adminPassword);
     }
+
+    fetch(`${API_URL}?${params.toString()}`)
+        .then(response => response.text())
+        .then(result => {
+            if (result === "STATUS_UPDATED") {
+                loadOrders();
+                return;
+            }
+
+            if (result === "ADMIN_PASSWORD_ERROR") {
+                alert("관리자 비밀번호가 올바르지 않거나 서버 설정이 없습니다.");
+                return;
+            }
+
+            if (result === "ORDER_NOT_FOUND") {
+                alert("해당 주문을 찾을 수 없습니다.");
+                return;
+            }
+
+            alert("주문 상태 변경에 실패했습니다: " + result);
+        })
+        .catch(error => {
+            console.error(error);
+            alert("서버 통신 중 오류가 발생했습니다.");
+        });
+    }
+
+
 
     /* =========================
        삭제
